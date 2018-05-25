@@ -6,10 +6,15 @@
 package com.acidmanic.utility.myoccontainer;
 
 import com.acidmanic.utility.myoccontainer.configuration.ConfigurationFile;
-import com.sun.jmx.snmp.SnmpDataTypeEnums;
+import com.acidmanic.utility.myoccontainer.exceptions.UnableToResolveException;
+import com.acidmanic.utility.myoccontainer.resolvestrategies.DefaultOrAnyResolveStrategy;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Parameter;
-import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import com.acidmanic.utility.myoccontainer.resolvestrategies.ResolveStrategy;
+import com.acidmanic.utility.myoccontainer.resolvestrategies.TagOnlyResolveStrategy;
+import com.acidmanic.utility.myoccontainer.resolvestrategies.TagOrDefaultResolveStrategy;
 
 /**
  *
@@ -17,8 +22,11 @@ import java.util.HashMap;
  */
 public class Resolver {
 
-    private final HashMap<Class, Class> dependanciesMap = new HashMap<>();
-    private final HashMap<Class, Class> primitives;
+    public static final String DEFAULT_TAG = "Default";
+
+    private final DependancyDictionary dependanciesMap = new DependancyDictionary();
+    private final DependancyDictionary primitives;
+
     public Resolver() {
         register(Long.class, Long.class);
         register(long.class, Long.class);
@@ -30,38 +38,73 @@ public class Resolver {
         register(double.class, Double.class);
         register(Float.class, Float.class);
         register(float.class, Float.class);
-        register(Byte.class,Byte.class);
-        register(byte.class,Byte.class);
-        register(String.class,String.class);
-        primitives = (HashMap<Class, Class>) this.dependanciesMap.clone();
+        register(Byte.class, Byte.class);
+        register(byte.class, Byte.class);
+        register(String.class, String.class);
+        primitives = (DependancyDictionary) this.dependanciesMap.clone();
     }
-    
-    public Resolver(ConfigurationFile configuration){
+
+    public Resolver(ConfigurationFile configuration) {
         this();
-        HashMap<Class,Class> types = configuration.getDependancyMap();
-        for(Class tfrom:types.keySet()){
+        DependancyDictionary types = configuration.getDependancyMap();
+        for (TaggedClass tfrom : types.keySet()) {
             this.dependanciesMap.put(tfrom, types.get(tfrom));
         }
     }
-    
-    
-    public Resolver(String filepath){
+
+    public Resolver(String filepath) {
         this(new ConfigurationFile(filepath));
     }
 
     public final void register(Class resolving, Class resolved) {
-        this.dependanciesMap.put(resolving, resolved);
+        try {
+            this.dependanciesMap.put(new TaggedClass(DEFAULT_TAG, resolving), resolved);
+        } catch (Exception ex) {
+            Logger.getLogger(Resolver.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public final void register(Class resolving, Class resolved, String tag) throws Exception {
+        this.dependanciesMap.put(new TaggedClass(tag, resolving), resolved);
     }
 
     public Object resolve(Class type) throws Exception {
-        Class resolvedType = null;
+        return Resolver.this.resolve(type, DEFAULT_TAG, new DefaultOrAnyResolveStrategy(dependanciesMap));
+    }
 
-        try {
-            resolvedType = this.dependanciesMap.get(type);
-        } catch (Exception e) {
-            throw new Exception(String.format("Unable to resolve type: {0}",
-                    type.getName()));
+    public Object resolveByTagOnly(Class type, String tag) throws Exception {
+        return Resolver.this.resolve(type, tag, new TagOnlyResolveStrategy(dependanciesMap));
+    }
+
+    public Object resolve(Class type, String tag) throws Exception {
+        return Resolver.this.resolve(type, tag, new TagOrDefaultResolveStrategy(dependanciesMap));
+    }
+    
+
+    private Object resolve(Class resolving,String tagIfAny
+            , ResolveStrategy strategy) throws Exception{
+        Class resolved = strategy.search(resolving, tagIfAny);
+        if(resolved==null){
+            throw new UnableToResolveException();
+        }else{
+            return createObject(resolved,tagIfAny,strategy);
         }
+    }
+    
+    
+    public DependancyDictionary getRegisteredDependancies() {
+        DependancyDictionary ret
+                = (DependancyDictionary) this.dependanciesMap.clone();
+        for (TaggedClass key : primitives.keySet()) {
+            if (ret.containsKey(key)) {
+                ret.remove(key);
+            }
+        }
+        return ret;
+    }
+
+    private Object createObject(Class resolvedType, String tagIfAny
+            , ResolveStrategy strategy) throws Exception {
         Constructor[] constructors = resolvedType.getConstructors();
         Constructor ctor = constructors[0];
         if (ctor.getParameterCount() == 0) {
@@ -70,20 +113,9 @@ public class Resolver {
         Object[] parameters = new Object[ctor.getParameterCount()];
         Parameter[] parameterTypes = ctor.getParameters();
         for (int i = 0; i < parameters.length; i++) {
-            parameters[i] = resolve(parameterTypes[i].getType());
+            parameters[i] = Resolver.this.resolve(parameterTypes[i].getType(),
+                    tagIfAny,strategy);
         }
         return ctor.newInstance(parameters);
-    }
-
-    
-    public HashMap<Class,Class> getRegisteredDependancies(){
-         HashMap<Class, Class> ret =
-                 (HashMap<Class, Class>) this.dependanciesMap.clone();
-         for(Class key:primitives.keySet()){
-             if(ret.containsKey(key)){
-                 ret.remove(key);
-             }
-         }
-         return ret;
     }
 }
