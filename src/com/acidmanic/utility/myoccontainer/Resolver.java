@@ -7,6 +7,7 @@ package com.acidmanic.utility.myoccontainer;
 
 import com.acidmanic.utility.myoccontainer.configuration.ConfigurationFile;
 import com.acidmanic.utility.myoccontainer.exceptions.UnableToResolveException;
+import com.acidmanic.utility.myoccontainer.resolvearguments.ResolveArguments;
 import com.acidmanic.utility.myoccontainer.resolvestrategies.DefaultOrAnyResolveStrategy;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Parameter;
@@ -83,11 +84,11 @@ public class Resolver {
 
     private Object resolve(Class resolving,String tagIfAny
             , ResolveStrategy strategy) throws Exception{
-        Class resolved = strategy.search(resolving, tagIfAny);
+        ResolveArguments resolved = strategy.search(resolving, tagIfAny);
         if(resolved==null){
             throw new UnableToResolveException();
         }else{
-            return createObject(resolved,tagIfAny,strategy);
+            return createObject(resolved.getTargetType(),tagIfAny,strategy);
         }
     }
     
