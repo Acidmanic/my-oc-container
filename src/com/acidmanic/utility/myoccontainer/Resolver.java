@@ -8,6 +8,7 @@ package com.acidmanic.utility.myoccontainer;
 import com.acidmanic.utility.myoccontainer.configuration.ConfigurationFile;
 import com.acidmanic.utility.myoccontainer.exceptions.UnableToResolveException;
 import com.acidmanic.utility.myoccontainer.resolvearguments.LifetimeManagerInterceptor;
+import com.acidmanic.utility.myoccontainer.resolvearguments.LifetimeType;
 import com.acidmanic.utility.myoccontainer.resolvearguments.ResolveArguments;
 import com.acidmanic.utility.myoccontainer.resolvestrategies.DefaultOrAnyResolveStrategy;
 import java.lang.reflect.Constructor;
@@ -17,6 +18,7 @@ import java.util.logging.Logger;
 import com.acidmanic.utility.myoccontainer.resolvestrategies.ResolveStrategy;
 import com.acidmanic.utility.myoccontainer.resolvestrategies.TagOnlyResolveStrategy;
 import com.acidmanic.utility.myoccontainer.resolvestrategies.TagOrDefaultResolveStrategy;
+import jdk.nashorn.internal.runtime.ArgumentSetter;
 
 /**
  *
@@ -60,16 +62,27 @@ public class Resolver {
 
     public final void register(Class resolving, Class resolved) {
         try {
-            this.dependanciesMap.put(new TaggedClass(DEFAULT_TAG, resolving), resolved);
+            this.dependanciesMap.put(new TaggedClass(DEFAULT_TAG, resolving), 
+                    new ResolveArguments(resolved));
         } catch (Exception ex) {
             Logger.getLogger(Resolver.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     public final void register(Class resolving, Class resolved, String tag) throws Exception {
-        this.dependanciesMap.put(new TaggedClass(tag, resolving), resolved);
+        this.register(resolving, resolved,tag,LifetimeType.Transient);
     }
-
+    
+    public final void register(Class resolving, Class resolved, LifetimeType lifetime) throws Exception {
+        this.register(resolving, resolved,DEFAULT_TAG,lifetime);
+    }
+    
+    public final void register(Class resolving, Class resolved,String tag, LifetimeType lifetime) throws Exception {
+        this.dependanciesMap.put(new TaggedClass(tag, resolving), 
+                new ResolveArguments(lifetime, resolved));
+    }
+    
+    
     public Object resolve(Class type) throws Exception {
         return Resolver.this.resolve(type, DEFAULT_TAG, new DefaultOrAnyResolveStrategy(dependanciesMap));
     }
