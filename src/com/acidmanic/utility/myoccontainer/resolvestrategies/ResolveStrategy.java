@@ -5,10 +5,12 @@
  */
 package com.acidmanic.utility.myoccontainer.resolvestrategies;
 
+import com.acidmanic.utility.myoccontainer.resolvearguments.ResolveArguments;
+
 /**
  *
  * @author diego
  */
 public interface ResolveStrategy {
-    Class search(Class resolving,String tagIfAny);
+    ResolveArguments search(Class resolving,String tagIfAny);
 }

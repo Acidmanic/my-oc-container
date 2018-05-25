@@ -7,11 +7,11 @@ package com.acidmanic.utility.myoccontainer.configuration;
 
 import com.acidmanic.utility.myoccontainer.DependancyDictionary;
 import com.acidmanic.utility.myoccontainer.TaggedClass;
+import com.acidmanic.utility.myoccontainer.configuration.serialization.MapRecordSerializer;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -23,18 +23,12 @@ public class ConfigurationFile {
     private final DependancyDictionary dependancyMap = new DependancyDictionary();
 
     private void addLine(String line) {
-        String[] parts = line.split("\\s+");
-        if (parts.length == 3) {
-            Class tfrom;
-            Class tto;
-            String tag;
-            try {
-                tfrom = Class.forName(parts[0]);
-                tag = parts[1].trim();
-                tto = Class.forName(parts[2]);
-                this.dependancyMap.put(new TaggedClass(tag, tfrom), tto);
-            } catch (Exception e) {
-            }
+        
+        try {
+            MapRecord record = new MapRecordSerializer()
+                    .deserialize(line);
+            this.dependancyMap.put(record.getKeyObject(), record.getValueObject());
+        } catch (Exception e) {
         }
     }
 
@@ -63,11 +57,10 @@ public class ConfigurationFile {
 
     public static void save(String filepath, DependancyDictionary dependancies) throws Exception {
         StringBuilder sb = new StringBuilder();
+        MapRecordSerializer serializer = new MapRecordSerializer();
         for (TaggedClass key : dependancies.keySet()) {
-            Class value = dependancies.get(key);
-            sb.append(key.getType().getName()).append("\t\t")
-                    .append(key.getTag()).append("\t\t")
-                    .append(value.getName()).append("\n");
+            MapRecord record = new MapRecord(key, dependancies.get(key));
+            sb.append(serializer.serialize(record)).append("\n");
         }
         File f = new File(filepath);
         try {

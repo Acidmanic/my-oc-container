@@ -8,6 +8,7 @@ package com.acidmanic.utility.myoccontainer.resolvestrategies;
 import com.acidmanic.utility.myoccontainer.DependancyDictionary;
 import com.acidmanic.utility.myoccontainer.Resolver;
 import com.acidmanic.utility.myoccontainer.TaggedClass;
+import com.acidmanic.utility.myoccontainer.resolvearguments.ResolveArguments;
 
 /**
  *
@@ -20,8 +21,8 @@ public class TagOrDefaultResolveStrategy extends ResolveStrategyBase {
     }
 
     @Override
-    public Class search(Class resolving, String tagIfAny) {
-        Class ret = null;
+    public ResolveArguments search(Class resolving, String tagIfAny) {
+        ResolveArguments ret = null;
         try {
             ret = this.dependancyDictionary.get(new TaggedClass(tagIfAny, resolving));
         } catch (Exception e) {

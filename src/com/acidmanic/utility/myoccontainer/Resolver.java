@@ -7,6 +7,9 @@ package com.acidmanic.utility.myoccontainer;
 
 import com.acidmanic.utility.myoccontainer.configuration.ConfigurationFile;
 import com.acidmanic.utility.myoccontainer.exceptions.UnableToResolveException;
+import com.acidmanic.utility.myoccontainer.resolvearguments.LifetimeManagerInterceptor;
+import com.acidmanic.utility.myoccontainer.resolvearguments.LifetimeType;
+import com.acidmanic.utility.myoccontainer.resolvearguments.ResolveArguments;
 import com.acidmanic.utility.myoccontainer.resolvestrategies.DefaultOrAnyResolveStrategy;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Parameter;
@@ -15,6 +18,7 @@ import java.util.logging.Logger;
 import com.acidmanic.utility.myoccontainer.resolvestrategies.ResolveStrategy;
 import com.acidmanic.utility.myoccontainer.resolvestrategies.TagOnlyResolveStrategy;
 import com.acidmanic.utility.myoccontainer.resolvestrategies.TagOrDefaultResolveStrategy;
+import jdk.nashorn.internal.runtime.ArgumentSetter;
 
 /**
  *
@@ -26,7 +30,7 @@ public class Resolver {
 
     private final DependancyDictionary dependanciesMap = new DependancyDictionary();
     private final DependancyDictionary primitives;
-
+    private final LifetimeManagerInterceptor lifetimeManager = new LifetimeManagerInterceptor();
     public Resolver() {
         register(Long.class, Long.class);
         register(long.class, Long.class);
@@ -58,16 +62,27 @@ public class Resolver {
 
     public final void register(Class resolving, Class resolved) {
         try {
-            this.dependanciesMap.put(new TaggedClass(DEFAULT_TAG, resolving), resolved);
+            this.dependanciesMap.put(new TaggedClass(DEFAULT_TAG, resolving), 
+                    new ResolveArguments(resolved));
         } catch (Exception ex) {
             Logger.getLogger(Resolver.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     public final void register(Class resolving, Class resolved, String tag) throws Exception {
-        this.dependanciesMap.put(new TaggedClass(tag, resolving), resolved);
+        this.register(resolving, resolved,tag,LifetimeType.Transient);
     }
-
+    
+    public final void register(Class resolving, Class resolved, LifetimeType lifetime) throws Exception {
+        this.register(resolving, resolved,DEFAULT_TAG,lifetime);
+    }
+    
+    public final void register(Class resolving, Class resolved,String tag, LifetimeType lifetime) throws Exception {
+        this.dependanciesMap.put(new TaggedClass(tag, resolving), 
+                new ResolveArguments(lifetime, resolved));
+    }
+    
+    
     public Object resolve(Class type) throws Exception {
         return Resolver.this.resolve(type, DEFAULT_TAG, new DefaultOrAnyResolveStrategy(dependanciesMap));
     }
@@ -79,19 +94,18 @@ public class Resolver {
     public Object resolve(Class type, String tag) throws Exception {
         return Resolver.this.resolve(type, tag, new TagOrDefaultResolveStrategy(dependanciesMap));
     }
-    
 
-    private Object resolve(Class resolving,String tagIfAny
-            , ResolveStrategy strategy) throws Exception{
-        Class resolved = strategy.search(resolving, tagIfAny);
-        if(resolved==null){
+    private Object resolve(Class resolving, String tagIfAny, ResolveStrategy strategy) throws Exception {
+        ResolveArguments resolved = strategy.search(resolving, tagIfAny);
+        if (resolved == null) {
             throw new UnableToResolveException();
-        }else{
-            return createObject(resolved,tagIfAny,strategy);
         }
+        
+        return lifetimeManager.makeObject(resolved, 
+                () -> createObject(resolved.getTargetType(), tagIfAny, strategy));
+
     }
-    
-    
+
     public DependancyDictionary getRegisteredDependancies() {
         DependancyDictionary ret
                 = (DependancyDictionary) this.dependanciesMap.clone();
@@ -103,8 +117,7 @@ public class Resolver {
         return ret;
     }
 
-    private Object createObject(Class resolvedType, String tagIfAny
-            , ResolveStrategy strategy) throws Exception {
+    private Object createObject(Class resolvedType, String tagIfAny, ResolveStrategy strategy) throws Exception {
         Constructor[] constructors = resolvedType.getConstructors();
         Constructor ctor = constructors[0];
         if (ctor.getParameterCount() == 0) {
@@ -114,7 +127,7 @@ public class Resolver {
         Parameter[] parameterTypes = ctor.getParameters();
         for (int i = 0; i < parameters.length; i++) {
             parameters[i] = Resolver.this.resolve(parameterTypes[i].getType(),
-                    tagIfAny,strategy);
+                    tagIfAny, strategy);
         }
         return ctor.newInstance(parameters);
     }
