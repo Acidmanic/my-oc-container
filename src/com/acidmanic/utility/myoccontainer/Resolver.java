@@ -7,6 +7,7 @@ package com.acidmanic.utility.myoccontainer;
 
 import com.acidmanic.utility.myoccontainer.configuration.ConfigurationFile;
 import com.acidmanic.utility.myoccontainer.exceptions.UnableToResolveException;
+import com.acidmanic.utility.myoccontainer.resolvearguments.LifetimeManagerInterceptor;
 import com.acidmanic.utility.myoccontainer.resolvearguments.ResolveArguments;
 import com.acidmanic.utility.myoccontainer.resolvestrategies.DefaultOrAnyResolveStrategy;
 import java.lang.reflect.Constructor;
@@ -27,7 +28,7 @@ public class Resolver {
 
     private final DependancyDictionary dependanciesMap = new DependancyDictionary();
     private final DependancyDictionary primitives;
-
+    private final LifetimeManagerInterceptor lifetimeManager = new LifetimeManagerInterceptor();
     public Resolver() {
         register(Long.class, Long.class);
         register(long.class, Long.class);
@@ -80,19 +81,18 @@ public class Resolver {
     public Object resolve(Class type, String tag) throws Exception {
         return Resolver.this.resolve(type, tag, new TagOrDefaultResolveStrategy(dependanciesMap));
     }
-    
 
-    private Object resolve(Class resolving,String tagIfAny
-            , ResolveStrategy strategy) throws Exception{
+    private Object resolve(Class resolving, String tagIfAny, ResolveStrategy strategy) throws Exception {
         ResolveArguments resolved = strategy.search(resolving, tagIfAny);
-        if(resolved==null){
+        if (resolved == null) {
             throw new UnableToResolveException();
-        }else{
-            return createObject(resolved.getTargetType(),tagIfAny,strategy);
         }
+        
+        return lifetimeManager.makeObject(resolved, 
+                () -> createObject(resolved.getTargetType(), tagIfAny, strategy));
+
     }
-    
-    
+
     public DependancyDictionary getRegisteredDependancies() {
         DependancyDictionary ret
                 = (DependancyDictionary) this.dependanciesMap.clone();
@@ -104,8 +104,7 @@ public class Resolver {
         return ret;
     }
 
-    private Object createObject(Class resolvedType, String tagIfAny
-            , ResolveStrategy strategy) throws Exception {
+    private Object createObject(Class resolvedType, String tagIfAny, ResolveStrategy strategy) throws Exception {
         Constructor[] constructors = resolvedType.getConstructors();
         Constructor ctor = constructors[0];
         if (ctor.getParameterCount() == 0) {
@@ -115,7 +114,7 @@ public class Resolver {
         Parameter[] parameterTypes = ctor.getParameters();
         for (int i = 0; i < parameters.length; i++) {
             parameters[i] = Resolver.this.resolve(parameterTypes[i].getType(),
-                    tagIfAny,strategy);
+                    tagIfAny, strategy);
         }
         return ctor.newInstance(parameters);
     }
