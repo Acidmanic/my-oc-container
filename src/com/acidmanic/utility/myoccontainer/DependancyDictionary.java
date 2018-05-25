@@ -5,6 +5,7 @@
  */
 package com.acidmanic.utility.myoccontainer;
 
+import com.acidmanic.utility.myoccontainer.resolvearguments.ResolveArguments;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.List;
  */
 public class DependancyDictionary {
     
-    private HashMap<String, Class> map;
+    private HashMap<String, ResolveArguments> map;
     private ArrayList<TaggedClass> keys;
     public DependancyDictionary() {
         this.map = new HashMap<>();
@@ -31,13 +32,19 @@ public class DependancyDictionary {
         return c.getName()+";;;"+t;
     }
     
-    public Class put(TaggedClass tfrom,Class tto){
+    public ResolveArguments put(TaggedClass tfrom,Class tto){
         this.keys.add(tfrom);
-        return this.map.put(getUniqueString(tfrom), tto);
+        return this.map.put(getUniqueString(tfrom)
+                , new ResolveArguments(tto));
+    }
+    
+    public ResolveArguments put(TaggedClass tfrom,ResolveArguments tto){
+        this.keys.add(tfrom);
+        return this.map.put(getUniqueString(tfrom),tto);
     }
     
     @SuppressWarnings("element-type-mismatch")
-    public Class remove(TaggedClass key){
+    public ResolveArguments remove(TaggedClass key){
         this.keys.remove(key);
         return this.map.remove(key);
     }
@@ -47,7 +54,7 @@ public class DependancyDictionary {
     }
     
     
-    public Class get(TaggedClass key){
+    public ResolveArguments get(TaggedClass key){
         return this.map.get(getUniqueString(key));
     }
     
@@ -65,7 +72,7 @@ public class DependancyDictionary {
         return null;
     }
     
-    public Class get(Class key){
+    public ResolveArguments get(Class key){
         TaggedClass closestKey = searchForAKey(key);
         if(closestKey!=null){
             return this.get(closestKey);
@@ -83,7 +90,7 @@ public class DependancyDictionary {
     public DependancyDictionary clone(){
         DependancyDictionary ret = new DependancyDictionary();
         ret.keys = (ArrayList<TaggedClass>) this.keys.clone();
-        ret.map = (HashMap<String, Class>) this.map.clone();
+        ret.map = (HashMap<String, ResolveArguments>) this.map.clone();
         return ret;
     }
 }
