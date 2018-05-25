@@ -13,10 +13,14 @@ import myoccontainer.models.BlueCarBody;
 import myoccontainer.models.Body;
 import myoccontainer.models.Car;
 import myoccontainer.models.CarMotor;
+import myoccontainer.models.ClassicWheel;
 import myoccontainer.models.Electrics;
 import myoccontainer.models.FastElectrics;
 import myoccontainer.models.HeavySilanders;
+import myoccontainer.models.LightSilanders;
 import myoccontainer.models.Motor;
+import myoccontainer.models.PowerElectrics;
+import myoccontainer.models.RedCarBody;
 import myoccontainer.models.Silanders;
 import myoccontainer.models.SportWheel;
 import myoccontainer.models.Wheel;
@@ -27,27 +31,29 @@ import org.junit.Test;
  *
  * @author diego
  */
-public class ManualRegister {
-    
-    
-    
-    private final Resolver resolver = new Resolver();
+public class TaggedRegisterTest {
 
-    public ManualRegister() {
-    
+    private final Resolver resolver = new Resolver();
+    private final String tag = "Kitty";
+
+    public TaggedRegisterTest() throws Exception {
+
         resolver.register(Car.class, Car.class);
         resolver.register(Body.class, BlueCarBody.class);
-        resolver.register(Wheel.class, SportWheel.class);
+        resolver.register(Body.class, RedCarBody.class, tag);
+        resolver.register(Wheel.class, ClassicWheel.class);
+        resolver.register(Wheel.class, SportWheel.class,tag);
+        resolver.register(Silanders.class, LightSilanders.class,tag);
         resolver.register(Silanders.class, HeavySilanders.class);
-        resolver.register(Electrics.class, FastElectrics.class);
+        resolver.register(Electrics.class, PowerElectrics.class);
+        resolver.register(Electrics.class, FastElectrics.class,tag);
         resolver.register(Motor.class, CarMotor.class);
-    
+
     }
-    
-    
-    
+
     @Test
-    public void resolveCar(){
+    public void resolveDefaultCarTest() {
+        System.out.println("resolveDefaultCarTest");
         try {
             Car car = (Car) resolver.resolve(Car.class);
             car.print();
@@ -56,20 +62,34 @@ public class ManualRegister {
             System.out.println(ex.getMessage());
             Assert.fail(ex.getMessage());
         }
-        
+
     }
     
+    
     @Test
-    public void testSave(){
+    public void resolveTaggedCarTest() {
+        System.out.println("resolveTaggedCarTest");
+        try {
+            Car car = (Car) resolver.resolve(Car.class, tag);
+            car.print();
+            Assert.assertTrue(true);
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            Assert.fail(ex.getMessage());
+        }
+
+    }
+    
+
+    @Test
+    public void testSave() {
         try {
             ConfigurationFile.save("config.config", resolver.getRegisteredDependancies());
             Assert.assertTrue(true);
         } catch (Exception ex) {
-            Logger.getLogger(ManualRegister.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TaggedRegisterTest.class.getName()).log(Level.SEVERE, null, ex);
             Assert.fail();
         }
     }
-    
-    
-    
+
 }
