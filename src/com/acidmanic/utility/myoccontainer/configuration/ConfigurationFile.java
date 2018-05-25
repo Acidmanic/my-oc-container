@@ -5,6 +5,8 @@
  */
 package com.acidmanic.utility.myoccontainer.configuration;
 
+import com.acidmanic.utility.myoccontainer.DependancyDictionary;
+import com.acidmanic.utility.myoccontainer.TaggedClass;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -18,29 +20,29 @@ import java.util.List;
  */
 public class ConfigurationFile {
 
-    private final HashMap<Class, Class> dependancyMap = new HashMap<>();
+    private final DependancyDictionary dependancyMap = new DependancyDictionary();
 
     private void addLine(String line) {
         String[] parts = line.split("\\s+");
-        if (parts.length == 2) {
+        if (parts.length == 3) {
             Class tfrom;
             Class tto;
+            String tag;
             try {
                 tfrom = Class.forName(parts[0]);
-                tto = Class.forName(parts[1]);
+                tag = parts[1].trim();
+                tto = Class.forName(parts[2]);
+                this.dependancyMap.put(new TaggedClass(tag, tfrom), tto);
             } catch (Exception e) {
-                return;
             }
-            this.dependancyMap.put(tfrom, tto);
         }
     }
 
-    
-    private void laodFile(String path){
-        List<String>  lines ;
+    private void laodFile(String path) {
+        List<String> lines;
         try {
             lines = Files.readAllLines(Paths.get(path));
-            for(String line:lines){
+            for (String line : lines) {
                 addLine(line);
             }
         } catch (Exception e) {
@@ -50,31 +52,32 @@ public class ConfigurationFile {
     public ConfigurationFile(String filePath) {
         this.laodFile(filePath);
     }
-    
-    public HashMap<Class,Class> getDependancyMap(){
-        return (HashMap<Class,Class>)this.dependancyMap.clone();
+
+    public DependancyDictionary getDependancyMap() {
+        return this.dependancyMap.clone();
     }
-    
-    public void save(String filepath) throws Exception{
+
+    public void save(String filepath) throws Exception {
         ConfigurationFile.save(filepath, this.dependancyMap);
     }
-    
-    public static void save(String filepath,HashMap<Class,Class> dependancies) throws Exception{
+
+    public static void save(String filepath, DependancyDictionary dependancies) throws Exception {
         StringBuilder sb = new StringBuilder();
-        for (Class key:dependancies.keySet()){
+        for (TaggedClass key : dependancies.keySet()) {
             Class value = dependancies.get(key);
-            sb.append(key.getName()).append("\t\t")
+            sb.append(key.getType().getName()).append("\t\t")
+                    .append(key.getTag()).append("\t\t")
                     .append(value.getName()).append("\n");
         }
         File f = new File(filepath);
         try {
-            if(f.exists()){
-            f.delete();
-        }
+            if (f.exists()) {
+                f.delete();
+            }
         } catch (Exception e) {
             throw new Exception("Unable to write to file.");
         }
-        Files.write(Paths.get(filepath), sb.toString().getBytes(), 
+        Files.write(Paths.get(filepath), sb.toString().getBytes(),
                 StandardOpenOption.CREATE);
     }
 }
