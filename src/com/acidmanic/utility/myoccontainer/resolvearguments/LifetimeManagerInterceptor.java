@@ -5,6 +5,7 @@
  */
 package com.acidmanic.utility.myoccontainer.resolvearguments;
 
+import com.acidmanic.utility.myoccontainer.configuration.ResolveArguments;
 import java.util.HashMap;
 
 /**

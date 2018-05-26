@@ -1,5 +1,7 @@
 
-package com.acidmanic.utility.myoccontainer.resolvearguments;
+package com.acidmanic.utility.myoccontainer.configuration;
+
+import com.acidmanic.utility.myoccontainer.resolvearguments.LifetimeType;
 
 /**
  *

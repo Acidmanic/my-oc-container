@@ -12,7 +12,7 @@ import com.acidmanic.utility.myoccontainer.configuration.MapRecordBuilder;
 import com.acidmanic.utility.myoccontainer.exceptions.UnableToResolveException;
 import com.acidmanic.utility.myoccontainer.resolvearguments.LifetimeManagerInterceptor;
 import com.acidmanic.utility.myoccontainer.resolvearguments.LifetimeType;
-import com.acidmanic.utility.myoccontainer.resolvearguments.ResolveArguments;
+import com.acidmanic.utility.myoccontainer.configuration.ResolveArguments;
 import com.acidmanic.utility.myoccontainer.resolvestrategies.DefaultOrAnyResolveStrategy;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Parameter;

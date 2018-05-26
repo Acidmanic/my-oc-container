@@ -6,7 +6,7 @@
 package com.acidmanic.utility.myoccontainer.configuration.serialization;
 
 import com.acidmanic.utility.myoccontainer.resolvearguments.LifetimeType;
-import com.acidmanic.utility.myoccontainer.resolvearguments.ResolveArguments;
+import com.acidmanic.utility.myoccontainer.configuration.ResolveArguments;
 
 /**
  *
