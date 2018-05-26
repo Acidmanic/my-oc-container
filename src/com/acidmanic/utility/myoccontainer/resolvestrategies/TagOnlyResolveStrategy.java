@@ -6,7 +6,7 @@
 package com.acidmanic.utility.myoccontainer.resolvestrategies;
 
 import com.acidmanic.utility.myoccontainer.DependancyDictionary;
-import com.acidmanic.utility.myoccontainer.TaggedClass;
+import com.acidmanic.utility.myoccontainer.configuration.TaggedClass;
 import com.acidmanic.utility.myoccontainer.resolvearguments.ResolveArguments;
 
 /**

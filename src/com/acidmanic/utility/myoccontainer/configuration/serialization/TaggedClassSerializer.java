@@ -5,7 +5,7 @@
  */
 package com.acidmanic.utility.myoccontainer.configuration.serialization;
 
-import com.acidmanic.utility.myoccontainer.TaggedClass;
+import com.acidmanic.utility.myoccontainer.configuration.TaggedClass;
 
 /**
  *

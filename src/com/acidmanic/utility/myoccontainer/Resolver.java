@@ -5,7 +5,10 @@
  */
 package com.acidmanic.utility.myoccontainer;
 
+import com.acidmanic.utility.myoccontainer.configuration.TaggedClass;
 import com.acidmanic.utility.myoccontainer.configuration.ConfigurationFile;
+import com.acidmanic.utility.myoccontainer.configuration.MapRecord;
+import com.acidmanic.utility.myoccontainer.configuration.MapRecordBuilder;
 import com.acidmanic.utility.myoccontainer.exceptions.UnableToResolveException;
 import com.acidmanic.utility.myoccontainer.resolvearguments.LifetimeManagerInterceptor;
 import com.acidmanic.utility.myoccontainer.resolvearguments.LifetimeType;
