@@ -26,7 +26,7 @@ public class DependancyDictionaryFluentBuilderAdapter implements MaprecordDictio
     
     
     public synchronized DependancyDictionary getDictionary(){
-        if(isAnyUnbuiltRecord()==false){
+        if(isAnyUnbuiltRecord()){
             buildUnbuiltRecords();
         }
         return this.dependancyDictionary;
