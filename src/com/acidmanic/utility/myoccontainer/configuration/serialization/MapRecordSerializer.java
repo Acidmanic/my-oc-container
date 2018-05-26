@@ -17,8 +17,8 @@ public class MapRecordSerializer extends SimpleSerializerOf<MapRecord>{
 
     @Override
     public String serialize(MapRecord object) {
-        return new TaggedClassSerializer().serialize(object.getKeyObject()) +
-                SEP + new ResolveArgumentsSerializer().serialize(object.getValueObject());
+        return new TaggedClassSerializer().serialize(object.getTaggedClass()) +
+                SEP + new ResolveArgumentsSerializer().serialize(object.getResolveArguments());
     }
 
     @Override

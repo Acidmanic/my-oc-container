@@ -44,9 +44,9 @@ public class SimpleSerializingTest {
         System.out.println(line);
         MapRecord converted = new MapRecordSerializer()
                 .deserialize(line);
-        Assert.assertEquals(converted.getKeyObject().getTag(), record.getKeyObject().getTag());
-        Assert.assertEquals(converted.getKeyObject().getType().getName(), 
-                record.getKeyObject().getType().getName());
+        Assert.assertEquals(converted.getTaggedClass().getTag(), record.getTaggedClass().getTag());
+        Assert.assertEquals(converted.getTaggedClass().getType().getName(), 
+                record.getTaggedClass().getType().getName());
         
     }
 
