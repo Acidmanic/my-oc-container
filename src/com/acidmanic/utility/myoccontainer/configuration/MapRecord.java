@@ -13,31 +13,31 @@ import com.acidmanic.utility.myoccontainer.resolvearguments.ResolveArguments;
  * @author diego
  */
 public class MapRecord {
-    private TaggedClass keyObject;
-    private ResolveArguments valueObject;
+    private TaggedClass taggedClass;
+    private ResolveArguments resolveArguments;
 
-    public MapRecord(TaggedClass keyObject, ResolveArguments valueObject) {
-        this.keyObject = keyObject;
-        this.valueObject = valueObject;
+    public MapRecord(TaggedClass taggedClass, ResolveArguments resolveArguments) {
+        this.taggedClass = taggedClass;
+        this.resolveArguments = resolveArguments;
     }
 
     public MapRecord() {
     }
 
-    public TaggedClass getKeyObject() {
-        return keyObject;
+    public TaggedClass getTaggedClass() {
+        return taggedClass;
     }
 
-    public void setKeyObject(TaggedClass keyObject) {
-        this.keyObject = keyObject;
+    public void setTaggedClass(TaggedClass taggedClass) {
+        this.taggedClass = taggedClass;
     }
 
-    public ResolveArguments getValueObject() {
-        return valueObject;
+    public ResolveArguments getResolveArguments() {
+        return resolveArguments;
     }
 
-    public void setValueObject(ResolveArguments valueObject) {
-        this.valueObject = valueObject;
+    public void setResolveArguments(ResolveArguments resolveArguments) {
+        this.resolveArguments = resolveArguments;
     }
     
     

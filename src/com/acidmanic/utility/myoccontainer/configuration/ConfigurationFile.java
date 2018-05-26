@@ -27,7 +27,7 @@ public class ConfigurationFile {
         try {
             MapRecord record = new MapRecordSerializer()
                     .deserialize(line);
-            this.dependancyMap.put(record.getKeyObject(), record.getValueObject());
+            this.dependancyMap.put(record.getTaggedClass(), record.getResolveArguments());
         } catch (Exception e) {
         }
     }
