@@ -30,7 +30,7 @@ public class TagOrDefaultResolveStrategy extends ResolveStrategyBase {
         if (ret == null) {
             try {
                 ret = this.dependancyDictionary.get(new TaggedClass(
-                        Resolver.DEFAULT_TAG, resolving));
+                        TaggedClass.DEFAULT_TAG, resolving));
             } catch (Exception e) {
             }
         }

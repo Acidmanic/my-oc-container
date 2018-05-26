@@ -26,7 +26,7 @@ public class DefaultOrAnyResolveStrategy extends ResolveStrategyBase {
 
         try {
             result = this.dependancyDictionary.get(new TaggedClass(
-                    Resolver.DEFAULT_TAG, resolving));
+                    TaggedClass.DEFAULT_TAG, resolving));
         } catch (Exception e) {
         }
         if (result == null) {

@@ -10,6 +10,8 @@ package com.acidmanic.utility.myoccontainer;
  * @author diego
  */
 public class TaggedClass {
+
+    public static final String DEFAULT_TAG = "Default";
     
     private String tag;
     private Class type;
