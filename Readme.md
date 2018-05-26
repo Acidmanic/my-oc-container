@@ -12,7 +12,15 @@ you can register all your in use classes by calling one of the  overloads of the
 
 Currently it does 'constructor injection's only. You can register different implementations for each class by providing  a tag parameter for _register_ method. a tag should be a string conforming to the convention of c-like languages variable names except it can have '-' and '.' in it.
 
-you can also perform a small life time management for objects by providing a __LifetimeType__ parameter to the _register_ method. LifetimeType currently can be __Transient__ (default) or __Singleton__. all singleton objects will be stored inside the  __Resolver__ object. and resolver itself is not a singleton so you can have multiple scopes in your application.
+It also supports a fluent-like syntax. to register classes with you preference via a fluent syntax, you can call the _register()_ method 
+without any arguments. then you can set any of the properties using provided functions:
+
+    *) bind(.) sets the class you want to choose an implementation for
+    *) to(.)   sets the class that would be the implementation
+    *) taggedAs(.)  will set a tag for this registration
+    *) livesAsA(.) will take a LifetimeType argument to set the type of lifetime you want to use.
+
+You can perform a small life time management for objects by providing a __LifetimeType__ parameter to the _register_ method. LifetimeType currently can be __Transient__ (default) or __Singleton__. all singleton objects will be stored inside the  __Resolver__ object. and resolver itself is not a singleton so you can have multiple scopes in your application.
 
 to create an object, you should call on of the _resolve_ methods from __Resolver__ object. different _resolve_ methods will  resolve the given type with different strategies. for example, _resolveByTagOnly_ will resolve the class only if it's pre-registered with the given tag.  It's also possible to save resolver configurations to a file or load them from a file.
 
@@ -31,7 +39,8 @@ a simple demo code would be like this:
 //Creating a resolver
 Resolver resolver = new Resolver();
 
-// Configuring your resolver
+// Configuring your resolver - normal argument call
+
 resolver.register(A.class, A.class);
 resolver.register(A.class, A.class,"fancyOne",LifetimeType.Singleton);
 resolver.register(b.class, B1.class);               // as default
@@ -39,13 +48,35 @@ resolver.register(b.class, B2.class,"fancyOne");    // fancy implementation
 resolver.register(c.class, C1.class);               // default
 resolver.register(c.class, C2.class,"fancyOne");    // fancy
 
+// Configuring your resolver - fluent like syntax
+
+resolver.register().bind(A.class).to(A.class);
+resolver.register().bind(A.class).to(A.class).taggedAs("fancyOne").livesAsA(LifetimeType.Singleton);
+resolver.register().bind(b.class).to(B1.class);  
+resolver.register().bind(b.class).to(B2.class).taggedAs("fancyOne");  
+resolver.register().bind(c.class).to(C1.class);  
+resolver.register().bind(b.class).to(C2.class).taggedAs("fancyOne");  
+
 // Using resolver
+
+
 // this will make a transient A object with default implementation.
+
 A aDefaultImplementation = resolver.resolve(A.class);
+
 // this will make an A object with fancy implementation.
 // this object will be a singleton.
+
 A aFancyImplementation = resolver.resolve(A.class,"fancyOne"); 
+
+
 ```
+
+__More Examples__
+
+If you downloaded the code, you can take a look at test codes in the project in the package _test.myoccontainer.*_.
+
+
 <p>Good luck</p>
 <p>Mani</p>   
 
