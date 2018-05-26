@@ -22,11 +22,11 @@ public class ConfigurationFile {
     private final DependancyDictionary dependancyMap = new DependancyDictionary();
 
     private void addLine(String line) {
-        
+
         try {
             MapRecord record = new MapRecordSerializer()
                     .deserialize(line);
-            this.dependancyMap.put(record.getTaggedClass(), record.getResolveArguments());
+            this.dependancyMap.put(record);
         } catch (Exception e) {
         }
     }
@@ -57,8 +57,7 @@ public class ConfigurationFile {
     public static void save(String filepath, DependancyDictionary dependancies) throws Exception {
         StringBuilder sb = new StringBuilder();
         MapRecordSerializer serializer = new MapRecordSerializer();
-        for (TaggedClass key : dependancies.keySet()) {
-            MapRecord record = new MapRecord(key, dependancies.get(key));
+        for (MapRecord record : dependancies.toList()) {
             sb.append(serializer.serialize(record)).append("\n");
         }
         File f = new File(filepath);
