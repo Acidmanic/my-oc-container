@@ -5,93 +5,100 @@
  */
 package com.acidmanic.utility.myoccontainer;
 
+import com.acidmanic.utility.myoccontainer.configuration.MapRecord;
 import com.acidmanic.utility.myoccontainer.configuration.TaggedClass;
-import com.acidmanic.utility.myoccontainer.configuration.ResolveArguments;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 
 /**
  *
  * @author diego
  */
-public class DependancyDictionary {
-    
-    private HashMap<String, ResolveArguments> map;
-    private ArrayList<TaggedClass> keys;
+public class DependancyDictionary implements RecordmapDictionary {
+
+    private ArrayList<MapRecord> mappingRecords;
+    private HashMap<String, MapRecord> tagIndexes;
+
     public DependancyDictionary() {
-        this.map = new HashMap<>();
-        this.keys= new ArrayList<>();
+        this.mappingRecords = new ArrayList<>();
+        this.tagIndexes = new HashMap<>();
     }
-    
-    private String getUniqueString(TaggedClass t){
-        return getUniqueString(t.getType(),t.getTag());
+
+    private String getUniqueString(MapRecord record) {
+        return getUniqueString(record.getTaggedClass());
     }
-    
-    private String getUniqueString(Class c,String t){
-        return c.getName()+";;;"+t;
+
+    private String getUniqueString(TaggedClass t) {
+        return getUniqueString(t.getType(), t.getTag());
     }
-    
-    public ResolveArguments put(TaggedClass tfrom,Class tto){
-        this.keys.add(tfrom);
-        return this.map.put(getUniqueString(tfrom)
-                , new ResolveArguments(tto));
+
+    private String getUniqueString(Class c, String t) {
+        if (c == null) {
+            return "NULL;;;" + t;
+        } else {
+            return c.getName() + ";;;" + t;
+        }
     }
-    
-    public ResolveArguments put(TaggedClass tfrom,ResolveArguments tto){
-        this.keys.add(tfrom);
-        return this.map.put(getUniqueString(tfrom),tto);
+
+    @Override
+    public void put(MapRecord record) {
+        this.mappingRecords.add(record);
+        this.tagIndexes.put(getUniqueString(record), record);
     }
-    
-    @SuppressWarnings("element-type-mismatch")
-    public ResolveArguments remove(TaggedClass key){
-        this.keys.remove(key);
-        return this.map.remove(key);
+
+    @Override
+    public MapRecord get(Class type, String tag) {
+        return this.tagIndexes.get(getUniqueString(type, tag));
     }
-    
-    public boolean containsKey(TaggedClass key){
-        return this.map.containsKey(getUniqueString(key));
-    }
-    
-    
-    public ResolveArguments get(TaggedClass key){
-        return this.map.get(getUniqueString(key));
-    }
-    
-    
-    public List<TaggedClass> keySet(){
-        return this.keys;
-    }
-    
-    public TaggedClass searchForAKey(Class key){
-        for(TaggedClass t: this.keys){
-            if(key.getName().compareTo(t.getType().getName())==0){
-                return t;
+
+    @Override
+    public MapRecord searchForAKey(Class key) {
+        for (MapRecord record : this.mappingRecords) {
+            if (key.getName().compareTo(record.getTaggedClass().getType().getName()) == 0) {
+                return record;
             }
         }
         return null;
     }
-    
-    public ResolveArguments get(Class key){
-        TaggedClass closestKey = searchForAKey(key);
-        if(closestKey!=null){
-            return this.get(closestKey);
-        }
-        return null;
+
+    @Override
+    public boolean containesAny(Class key) {
+        return searchForAKey(key) != null;
     }
-    
-    public boolean containesAny(Class key){
-        return searchForAKey(key)!=null;
+
+    @Override
+    public MapRecord remove(Class type, String tag) {
+        MapRecord record = get(type, tag);
+        String key = getUniqueString(record);
+        this.mappingRecords.remove(record);
+        this.tagIndexes.remove(key);
+        return record;
     }
-    
-    
+
     @Override
     @SuppressWarnings({"CloneDoesntCallSuperClone", "CloneDeclaresCloneNotSupported"})
-    public DependancyDictionary clone(){
+    public DependancyDictionary clone() {
         DependancyDictionary ret = new DependancyDictionary();
-        ret.keys = (ArrayList<TaggedClass>) this.keys.clone();
-        ret.map = (HashMap<String, ResolveArguments>) this.map.clone();
+        ret.mappingRecords = (ArrayList<MapRecord>) this.mappingRecords.clone();
+        ret.tagIndexes = (HashMap<String, MapRecord>) this.tagIndexes.clone();
         return ret;
+    }
+
+    
+
+    @Override
+    public List<MapRecord> toList() {
+        return (List<MapRecord>) this.mappingRecords.clone();
+    }
+
+    @Override
+    public void putAll(DependancyDictionary dictionary) {
+        this.mappingRecords.addAll(dictionary.mappingRecords);
+    }
+
+    @Override
+    public void subtract(DependancyDictionary dictionary) {
+        this.mappingRecords.removeAll(dictionary.mappingRecords);
     }
 }
