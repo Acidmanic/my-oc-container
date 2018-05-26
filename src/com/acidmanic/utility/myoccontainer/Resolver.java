@@ -26,7 +26,6 @@ import jdk.nashorn.internal.runtime.ArgumentSetter;
  */
 public class Resolver {
 
-    public static final String DEFAULT_TAG = "Default";
 
     private final DependancyDictionary dependanciesMap = new DependancyDictionary();
     private final DependancyDictionary primitives;
@@ -62,7 +61,7 @@ public class Resolver {
 
     public final void register(Class resolving, Class resolved) {
         try {
-            this.dependanciesMap.put(new TaggedClass(DEFAULT_TAG, resolving), 
+            this.dependanciesMap.put(new TaggedClass(TaggedClass.DEFAULT_TAG, resolving), 
                     new ResolveArguments(resolved));
         } catch (Exception ex) {
             Logger.getLogger(Resolver.class.getName()).log(Level.SEVERE, null, ex);
@@ -74,7 +73,7 @@ public class Resolver {
     }
     
     public final void register(Class resolving, Class resolved, LifetimeType lifetime) throws Exception {
-        this.register(resolving, resolved,DEFAULT_TAG,lifetime);
+        this.register(resolving, resolved, TaggedClass.DEFAULT_TAG,lifetime);
     }
     
     public final void register(Class resolving, Class resolved,String tag, LifetimeType lifetime) throws Exception {
@@ -84,7 +83,7 @@ public class Resolver {
     
     
     public Object resolve(Class type) throws Exception {
-        return Resolver.this.resolve(type, DEFAULT_TAG, new DefaultOrAnyResolveStrategy(dependanciesMap));
+        return Resolver.this.resolve(type, TaggedClass.DEFAULT_TAG, new DefaultOrAnyResolveStrategy(dependanciesMap));
     }
 
     public Object resolveByTagOnly(Class type, String tag) throws Exception {

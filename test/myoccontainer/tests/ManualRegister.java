@@ -41,8 +41,6 @@ public class ManualRegister {
         resolver.register(Silanders.class, HeavySilanders.class);
         resolver.register(Electrics.class, FastElectrics.class);
         resolver.register(Motor.class, CarMotor.class);
-        
-        resolver.register(resolving).to().named().withLifestyle();
     
     }
     
