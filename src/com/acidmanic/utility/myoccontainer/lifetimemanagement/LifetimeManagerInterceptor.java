@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.acidmanic.utility.myoccontainer.resolvearguments;
+package com.acidmanic.utility.myoccontainer.lifetimemanagement;
 
 import com.acidmanic.utility.myoccontainer.configuration.ResolveArguments;
 import java.util.HashMap;
