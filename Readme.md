@@ -48,7 +48,9 @@ A aFancyImplementation = resolver.resolve(A.class,"fancyOne");
 ```
 <p>Good luck</p>
 <p>Mani</p>   
+
 __Contact:__
+
 acidmanic.moayedi@gmail.com         
 
 
