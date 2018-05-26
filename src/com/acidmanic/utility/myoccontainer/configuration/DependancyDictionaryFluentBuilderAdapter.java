@@ -6,15 +6,15 @@
 package com.acidmanic.utility.myoccontainer.configuration;
 
 import com.acidmanic.utility.myoccontainer.DependancyDictionary;
-import com.acidmanic.utility.myoccontainer.RecordmapDictionary;
 import java.util.ArrayList;
 import java.util.List;
+import com.acidmanic.utility.myoccontainer.MaprecordDictionary;
 
 /**
  *
  * @author diego
  */
-public class DependancyDictionaryFluentBuilderAdapter implements RecordmapDictionary {
+public class DependancyDictionaryFluentBuilderAdapter implements MaprecordDictionary {
     
     private final DependancyDictionary dependancyDictionary;
     private final ArrayList<MapRecordBuilder> builders;

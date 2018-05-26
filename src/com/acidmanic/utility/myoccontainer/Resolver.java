@@ -8,7 +8,6 @@ package com.acidmanic.utility.myoccontainer;
 import com.acidmanic.utility.myoccontainer.configuration.TaggedClass;
 import com.acidmanic.utility.myoccontainer.configuration.ConfigurationFile;
 import com.acidmanic.utility.myoccontainer.configuration.DependancyDictionaryFluentBuilderAdapter;
-import com.acidmanic.utility.myoccontainer.configuration.MapRecord;
 import com.acidmanic.utility.myoccontainer.configuration.MapRecordBuilder;
 import com.acidmanic.utility.myoccontainer.exceptions.UnableToResolveException;
 import com.acidmanic.utility.myoccontainer.lifetimemanagement.LifetimeManagerInterceptor;
@@ -22,8 +21,6 @@ import java.util.logging.Logger;
 import com.acidmanic.utility.myoccontainer.resolvestrategies.ResolveStrategy;
 import com.acidmanic.utility.myoccontainer.resolvestrategies.TagOnlyResolveStrategy;
 import com.acidmanic.utility.myoccontainer.resolvestrategies.TagOrDefaultResolveStrategy;
-import java.util.Dictionary;
-import jdk.nashorn.internal.runtime.ArgumentSetter;
 
 /**
  *
@@ -90,6 +87,9 @@ public class Resolver {
                 .build());
     }
     
+    public final MapRecordBuilder register(){
+        return this.dependanciesMap.fluent();
+    }
     
     public Object resolve(Class type) throws Exception {
         return Resolver.this.resolve(type, TaggedClass.DEFAULT_TAG, 
