@@ -6,7 +6,6 @@
 package com.acidmanic.utility.myoccontainer.configuration;
 
 import com.acidmanic.utility.myoccontainer.DependancyDictionary;
-import com.acidmanic.utility.myoccontainer.TaggedClass;
 import com.acidmanic.utility.myoccontainer.configuration.serialization.MapRecordSerializer;
 import java.io.File;
 import java.nio.file.Files;

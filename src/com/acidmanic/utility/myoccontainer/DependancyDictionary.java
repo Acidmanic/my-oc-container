@@ -5,6 +5,7 @@
  */
 package com.acidmanic.utility.myoccontainer;
 
+import com.acidmanic.utility.myoccontainer.configuration.TaggedClass;
 import com.acidmanic.utility.myoccontainer.resolvearguments.ResolveArguments;
 import java.util.ArrayList;
 import java.util.HashMap;
