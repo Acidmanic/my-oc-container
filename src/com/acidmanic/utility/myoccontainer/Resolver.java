@@ -7,6 +7,7 @@ package com.acidmanic.utility.myoccontainer;
 
 import com.acidmanic.utility.myoccontainer.configuration.TaggedClass;
 import com.acidmanic.utility.myoccontainer.configuration.ConfigurationFile;
+import com.acidmanic.utility.myoccontainer.configuration.DependancyDictionaryFluentBuilderAdapter;
 import com.acidmanic.utility.myoccontainer.configuration.MapRecord;
 import com.acidmanic.utility.myoccontainer.configuration.MapRecordBuilder;
 import com.acidmanic.utility.myoccontainer.exceptions.UnableToResolveException;
@@ -21,6 +22,7 @@ import java.util.logging.Logger;
 import com.acidmanic.utility.myoccontainer.resolvestrategies.ResolveStrategy;
 import com.acidmanic.utility.myoccontainer.resolvestrategies.TagOnlyResolveStrategy;
 import com.acidmanic.utility.myoccontainer.resolvestrategies.TagOrDefaultResolveStrategy;
+import java.util.Dictionary;
 import jdk.nashorn.internal.runtime.ArgumentSetter;
 
 /**
@@ -30,7 +32,8 @@ import jdk.nashorn.internal.runtime.ArgumentSetter;
 public class Resolver {
 
 
-    private final DependancyDictionary dependanciesMap = new DependancyDictionary();
+    private final DependancyDictionaryFluentBuilderAdapter dependanciesMap = 
+            new DependancyDictionaryFluentBuilderAdapter();
     private final DependancyDictionary primitives;
     private final LifetimeManagerInterceptor lifetimeManager = new LifetimeManagerInterceptor();
     public Resolver() {
@@ -47,15 +50,12 @@ public class Resolver {
         register(Byte.class, Byte.class);
         register(byte.class, Byte.class);
         register(String.class, String.class);
-        primitives = (DependancyDictionary) this.dependanciesMap.clone();
+        primitives = (DependancyDictionary) this.dependanciesMap.getDictionary().clone();
     }
 
     public Resolver(ConfigurationFile configuration) {
         this();
-        DependancyDictionary types = configuration.getDependancyMap();
-        for (TaggedClass tfrom : types.keySet()) {
-            this.dependanciesMap.put(tfrom, types.get(tfrom));
-        }
+        this.dependanciesMap.putAll(configuration.getDependancyMap());
     }
 
     public Resolver(String filepath) {
@@ -64,37 +64,46 @@ public class Resolver {
 
     public final void register(Class resolving, Class resolved) {
         try {
-            this.dependanciesMap.put(new TaggedClass(TaggedClass.DEFAULT_TAG, resolving), 
-                    new ResolveArguments(resolved));
+            this.dependanciesMap.put(new MapRecordBuilder()
+                    .bind(resolving).to(resolved)
+                    .build());
         } catch (Exception ex) {
             Logger.getLogger(Resolver.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     public final void register(Class resolving, Class resolved, String tag) throws Exception {
-        this.register(resolving, resolved,tag,LifetimeType.Transient);
+        this.dependanciesMap.put(new MapRecordBuilder()
+        .bind(resolving).to(resolved).tagged(tag)
+                .build());
     }
     
     public final void register(Class resolving, Class resolved, LifetimeType lifetime) throws Exception {
-        this.register(resolving, resolved, TaggedClass.DEFAULT_TAG,lifetime);
+        this.dependanciesMap.put(new MapRecordBuilder()
+        .bind(resolving).to(resolved).livesAsA(lifetime)
+                .build());
     }
     
     public final void register(Class resolving, Class resolved,String tag, LifetimeType lifetime) throws Exception {
-        this.dependanciesMap.put(new TaggedClass(tag, resolving), 
-                new ResolveArguments(lifetime, resolved));
+        this.dependanciesMap.put(new MapRecordBuilder()
+        .bind(resolving).to(resolved).tagged(tag).livesAsA(lifetime)
+                .build());
     }
     
     
     public Object resolve(Class type) throws Exception {
-        return Resolver.this.resolve(type, TaggedClass.DEFAULT_TAG, new DefaultOrAnyResolveStrategy(dependanciesMap));
+        return Resolver.this.resolve(type, TaggedClass.DEFAULT_TAG, 
+                new DefaultOrAnyResolveStrategy(dependanciesMap.getDictionary()));
     }
 
     public Object resolveByTagOnly(Class type, String tag) throws Exception {
-        return Resolver.this.resolve(type, tag, new TagOnlyResolveStrategy(dependanciesMap));
+        return Resolver.this.resolve(type, tag, 
+                new TagOnlyResolveStrategy(dependanciesMap.getDictionary()));
     }
 
     public Object resolve(Class type, String tag) throws Exception {
-        return Resolver.this.resolve(type, tag, new TagOrDefaultResolveStrategy(dependanciesMap));
+        return Resolver.this.resolve(type, tag, 
+                new TagOrDefaultResolveStrategy(dependanciesMap.getDictionary()));
     }
 
     private Object resolve(Class resolving, String tagIfAny, ResolveStrategy strategy) throws Exception {
@@ -110,12 +119,9 @@ public class Resolver {
 
     public DependancyDictionary getRegisteredDependancies() {
         DependancyDictionary ret
-                = (DependancyDictionary) this.dependanciesMap.clone();
-        for (TaggedClass key : primitives.keySet()) {
-            if (ret.containsKey(key)) {
-                ret.remove(key);
-            }
-        }
+                = (DependancyDictionary) this.dependanciesMap
+                        .getDictionary().clone();
+        ret.subtract(primitives);
         return ret;
     }
 
