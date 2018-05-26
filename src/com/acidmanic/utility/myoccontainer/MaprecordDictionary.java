@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @author diego
  */
-public interface RecordmapDictionary {
+public interface MaprecordDictionary {
 
     
     boolean containesAny(Class key);

@@ -15,7 +15,7 @@ import java.util.List;
  *
  * @author diego
  */
-public class DependancyDictionary implements RecordmapDictionary {
+public class DependancyDictionary implements MaprecordDictionary {
 
     private ArrayList<MapRecord> mappingRecords;
     private HashMap<String, MapRecord> tagIndexes;
