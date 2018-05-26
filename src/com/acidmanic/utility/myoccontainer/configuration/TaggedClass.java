@@ -5,6 +5,8 @@
  */
 package com.acidmanic.utility.myoccontainer.configuration;
 
+import com.acidmanic.utility.myoccontainer.exceptions.InvalidTagStringException;
+
 /**
  *
  * @author diego
@@ -34,7 +36,7 @@ public class TaggedClass {
         if (isValidTag(tag))
             this.tag = tag;
         else{
-            throw new Exception("Given tag is not valid.");
+            throw new InvalidTagStringException();
         }
     }
 
