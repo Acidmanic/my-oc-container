@@ -22,7 +22,8 @@ public class TagOnlyResolveStrategy extends ResolveStrategyBase{
     @Override
     public ResolveArguments search(Class resolving, String tagIfAny) {
         try {
-            return this.dependancyDictionary.get(new TaggedClass(tagIfAny, resolving));
+            return this.dependancyDictionary.get(resolving, tagIfAny)
+                    .getResolveArguments();
         } catch (Exception e) {
         }
         return null;

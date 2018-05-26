@@ -25,13 +25,14 @@ public class DefaultOrAnyResolveStrategy extends ResolveStrategyBase {
         ResolveArguments result = null;
 
         try {
-            result = this.dependancyDictionary.get(new TaggedClass(
-                    TaggedClass.DEFAULT_TAG, resolving));
+            result = this.dependancyDictionary.get(resolving, TaggedClass.DEFAULT_TAG)
+                    .getResolveArguments();
         } catch (Exception e) {
         }
         if (result == null) {
             try {
-                result = this.dependancyDictionary.get(resolving);
+                result = this.dependancyDictionary.searchForAKey(resolving)
+                        .getResolveArguments();
             } catch (Exception e) {
             }
         }

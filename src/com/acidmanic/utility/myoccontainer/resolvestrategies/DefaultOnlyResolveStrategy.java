@@ -26,8 +26,8 @@ public class DefaultOnlyResolveStrategy extends ResolveStrategyBase{
     @Override
     public ResolveArguments search(Class resolving, String tagIfAny) {
         try {
-            return dependancyDictionary.get(new TaggedClass(TaggedClass.DEFAULT_TAG,
-                    resolving));
+            return dependancyDictionary.get(resolving, TaggedClass.DEFAULT_TAG)
+                    .getResolveArguments();
         } catch (Exception e) {
         }
         return null;
