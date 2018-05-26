@@ -8,7 +8,7 @@ package tests.serializing;
 import com.acidmanic.utility.myoccontainer.configuration.TaggedClass;
 import com.acidmanic.utility.myoccontainer.configuration.MapRecord;
 import com.acidmanic.utility.myoccontainer.resolvearguments.LifetimeType;
-import com.acidmanic.utility.myoccontainer.resolvearguments.ResolveArguments;
+import com.acidmanic.utility.myoccontainer.configuration.ResolveArguments;
 import java.io.File;
 import java.util.ArrayList;
 import javax.xml.bind.JAXB;
