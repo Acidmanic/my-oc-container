@@ -19,10 +19,11 @@ public class DependancyDictionary implements MaprecordDictionary {
 
     private ArrayList<MapRecord> mappingRecords;
     private HashMap<String, MapRecord> tagIndexes;
-
+    private HashMap<String,ArrayList<MapRecord>> recordsPerClass;
     public DependancyDictionary() {
         this.mappingRecords = new ArrayList<>();
         this.tagIndexes = new HashMap<>();
+        this.recordsPerClass = new HashMap<>();
     }
 
     private String getUniqueString(MapRecord record) {
@@ -45,6 +46,11 @@ public class DependancyDictionary implements MaprecordDictionary {
     public void put(MapRecord record) {
         this.mappingRecords.add(record);
         this.tagIndexes.put(getUniqueString(record), record);
+        String classname = record.getTaggedClass().getType().getName();
+        if(this.recordsPerClass.containsKey(classname)==false){
+            this.recordsPerClass.put(classname, new ArrayList<>());
+        }
+        this.recordsPerClass.get(classname).add(record);
     }
 
     @Override
@@ -82,6 +88,7 @@ public class DependancyDictionary implements MaprecordDictionary {
         DependancyDictionary ret = new DependancyDictionary();
         ret.mappingRecords = (ArrayList<MapRecord>) this.mappingRecords.clone();
         ret.tagIndexes = (HashMap<String, MapRecord>) this.tagIndexes.clone();
+        ret.recordsPerClass = (HashMap<String, ArrayList<MapRecord>>) this.recordsPerClass.clone();
         return ret;
     }
 
@@ -94,11 +101,16 @@ public class DependancyDictionary implements MaprecordDictionary {
 
     @Override
     public void putAll(DependancyDictionary dictionary) {
-        this.mappingRecords.addAll(dictionary.mappingRecords);
+        dictionary.mappingRecords.forEach((record)-> this.put(record));
     }
 
     @Override
     public void subtract(DependancyDictionary dictionary) {
         this.mappingRecords.removeAll(dictionary.mappingRecords);
+    }
+
+    @Override
+    public List<MapRecord> getAll(Class type) {
+        return this.recordsPerClass.get(type.getName());
     }
 }

@@ -96,6 +96,11 @@ public class DependancyDictionaryFluentBuilderAdapter implements MaprecordDictio
     public List<MapRecord> toList() {
         return this.getDictionary().toList();
     }
+
+    @Override
+    public List<MapRecord> getAll(Class type) {
+        return this.getDictionary().getAll(type);
+    }
     
     
     

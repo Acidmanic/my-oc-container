@@ -31,4 +31,6 @@ public interface MaprecordDictionary {
 
     List<MapRecord> toList();
     
+    List<MapRecord> getAll(Class type);
+    
 }
