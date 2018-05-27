@@ -5,7 +5,7 @@
  */
 package com.acidmanic.utility.myoccontainer.configuration;
 
-import com.acidmanic.utility.myoccontainer.DependancyDictionary;
+import com.acidmanic.utility.myoccontainer.ResolvationMapRecordDictionary;
 import com.acidmanic.utility.myoccontainer.configuration.serialization.MapRecordSerializer;
 import java.io.File;
 import java.nio.file.Files;
@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class ConfigurationFile {
 
-    private final DependancyDictionary dependancyMap = new DependancyDictionary();
+    private final ResolvationMapRecordDictionary dependancyMap = new ResolvationMapRecordDictionary();
 
     private void addLine(String line) {
 
@@ -46,7 +46,7 @@ public class ConfigurationFile {
         this.laodFile(filePath);
     }
 
-    public DependancyDictionary getDependancyMap() {
+    public ResolvationMapRecordDictionary getDependancyMap() {
         return this.dependancyMap.clone();
     }
 
@@ -54,7 +54,7 @@ public class ConfigurationFile {
         ConfigurationFile.save(filepath, this.dependancyMap);
     }
 
-    public static void save(String filepath, DependancyDictionary dependancies) throws Exception {
+    public static void save(String filepath, ResolvationMapRecordDictionary dependancies) throws Exception {
         StringBuilder sb = new StringBuilder();
         MapRecordSerializer serializer = new MapRecordSerializer();
         for (MapRecord record : dependancies.toList()) {

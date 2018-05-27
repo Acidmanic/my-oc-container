@@ -5,27 +5,28 @@
  */
 package com.acidmanic.utility.myoccontainer.configuration;
 
-import com.acidmanic.utility.myoccontainer.DependancyDictionary;
+import com.acidmanic.utility.myoccontainer.ResolvationMapRecordDictionary;
 import java.util.ArrayList;
 import java.util.List;
-import com.acidmanic.utility.myoccontainer.MaprecordDictionary;
+import com.acidmanic.utility.myoccontainer.ResolvationMapRecordDictionaryInterface;
 
 /**
  *
  * @author diego
  */
-public class DependancyDictionaryFluentBuilderAdapter implements MaprecordDictionary {
+public class ResolvationMapRecordDictionaryFluentBuilderAdapter
+        implements ResolvationMapRecordDictionaryInterface {
     
-    private final DependancyDictionary dependancyDictionary;
+    private final ResolvationMapRecordDictionary dependancyDictionary;
     private final ArrayList<MapRecordBuilder> builders;
     
-    public DependancyDictionaryFluentBuilderAdapter() {
-        this.dependancyDictionary = new DependancyDictionary();
+    public ResolvationMapRecordDictionaryFluentBuilderAdapter() {
+        this.dependancyDictionary = new ResolvationMapRecordDictionary();
         this.builders = new ArrayList<>();
     }
     
     
-    public synchronized DependancyDictionary getDictionary(){
+    public synchronized ResolvationMapRecordDictionary getDictionary(){
         if(isAnyUnbuiltRecord()){
             buildUnbuiltRecords();
         }
@@ -73,7 +74,7 @@ public class DependancyDictionaryFluentBuilderAdapter implements MaprecordDictio
     }
 
     @Override
-    public void putAll(DependancyDictionary dictionary) {
+    public void putAll(ResolvationMapRecordDictionary dictionary) {
         this.getDictionary().putAll(dictionary);
     }
 
@@ -88,7 +89,7 @@ public class DependancyDictionaryFluentBuilderAdapter implements MaprecordDictio
     }
 
     @Override
-    public void subtract(DependancyDictionary dictionary) {
+    public void subtract(ResolvationMapRecordDictionary dictionary) {
         this.getDictionary().subtract(dictionary);
     }
 

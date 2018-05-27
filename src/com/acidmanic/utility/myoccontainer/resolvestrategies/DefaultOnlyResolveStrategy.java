@@ -5,7 +5,7 @@
  */
 package com.acidmanic.utility.myoccontainer.resolvestrategies;
 
-import com.acidmanic.utility.myoccontainer.DependancyDictionary;
+import com.acidmanic.utility.myoccontainer.ResolvationMapRecordDictionary;
 import com.acidmanic.utility.myoccontainer.Resolver;
 import com.acidmanic.utility.myoccontainer.configuration.TaggedClass;
 import com.acidmanic.utility.myoccontainer.configuration.ResolveArguments;
@@ -16,7 +16,7 @@ import com.acidmanic.utility.myoccontainer.configuration.ResolveArguments;
  */
 public class DefaultOnlyResolveStrategy extends ResolveStrategyBase{
 
-    public DefaultOnlyResolveStrategy(DependancyDictionary dependancyDictionary) {
+    public DefaultOnlyResolveStrategy(ResolvationMapRecordDictionary dependancyDictionary) {
         super(dependancyDictionary);
     }
 

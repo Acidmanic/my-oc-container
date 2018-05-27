@@ -15,12 +15,12 @@ import java.util.List;
  *
  * @author diego
  */
-public class DependancyDictionary implements MaprecordDictionary {
+public class ResolvationMapRecordDictionary implements ResolvationMapRecordDictionaryInterface {
 
     private ArrayList<MapRecord> mappingRecords;
     private HashMap<String, MapRecord> tagIndexes;
     private HashMap<String,ArrayList<MapRecord>> recordsPerClass;
-    public DependancyDictionary() {
+    public ResolvationMapRecordDictionary() {
         this.mappingRecords = new ArrayList<>();
         this.tagIndexes = new HashMap<>();
         this.recordsPerClass = new HashMap<>();
@@ -84,8 +84,8 @@ public class DependancyDictionary implements MaprecordDictionary {
 
     @Override
     @SuppressWarnings({"CloneDoesntCallSuperClone", "CloneDeclaresCloneNotSupported"})
-    public DependancyDictionary clone() {
-        DependancyDictionary ret = new DependancyDictionary();
+    public ResolvationMapRecordDictionary clone() {
+        ResolvationMapRecordDictionary ret = new ResolvationMapRecordDictionary();
         ret.mappingRecords = (ArrayList<MapRecord>) this.mappingRecords.clone();
         ret.tagIndexes = (HashMap<String, MapRecord>) this.tagIndexes.clone();
         ret.recordsPerClass = (HashMap<String, ArrayList<MapRecord>>) this.recordsPerClass.clone();
@@ -100,12 +100,12 @@ public class DependancyDictionary implements MaprecordDictionary {
     }
 
     @Override
-    public void putAll(DependancyDictionary dictionary) {
+    public void putAll(ResolvationMapRecordDictionary dictionary) {
         dictionary.mappingRecords.forEach((record)-> this.put(record));
     }
 
     @Override
-    public void subtract(DependancyDictionary dictionary) {
+    public void subtract(ResolvationMapRecordDictionary dictionary) {
         this.mappingRecords.removeAll(dictionary.mappingRecords);
     }
 

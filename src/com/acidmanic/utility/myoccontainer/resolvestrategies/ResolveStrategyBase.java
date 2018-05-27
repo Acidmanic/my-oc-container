@@ -5,7 +5,7 @@
  */
 package com.acidmanic.utility.myoccontainer.resolvestrategies;
 
-import com.acidmanic.utility.myoccontainer.DependancyDictionary;
+import com.acidmanic.utility.myoccontainer.ResolvationMapRecordDictionary;
 
 /**
  *
@@ -14,9 +14,9 @@ import com.acidmanic.utility.myoccontainer.DependancyDictionary;
 public abstract class ResolveStrategyBase implements ResolveStrategy{
     
     
-    protected DependancyDictionary dependancyDictionary;
+    protected ResolvationMapRecordDictionary dependancyDictionary;
 
-    public ResolveStrategyBase(DependancyDictionary dependancyDictionary) {
+    public ResolveStrategyBase(ResolvationMapRecordDictionary dependancyDictionary) {
         this.dependancyDictionary = dependancyDictionary;
     }
     

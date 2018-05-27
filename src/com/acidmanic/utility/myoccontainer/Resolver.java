@@ -7,7 +7,7 @@ package com.acidmanic.utility.myoccontainer;
 
 import com.acidmanic.utility.myoccontainer.configuration.TaggedClass;
 import com.acidmanic.utility.myoccontainer.configuration.ConfigurationFile;
-import com.acidmanic.utility.myoccontainer.configuration.DependancyDictionaryFluentBuilderAdapter;
+import com.acidmanic.utility.myoccontainer.configuration.ResolvationMapRecordDictionaryFluentBuilderAdapter;
 import com.acidmanic.utility.myoccontainer.configuration.MapRecordBuilder;
 import com.acidmanic.utility.myoccontainer.exceptions.UnableToResolveException;
 import com.acidmanic.utility.myoccontainer.lifetimemanagement.LifetimeManagerInterceptor;
@@ -29,9 +29,9 @@ import com.acidmanic.utility.myoccontainer.resolvestrategies.TagOrDefaultResolve
 public class Resolver {
 
 
-    private final DependancyDictionaryFluentBuilderAdapter dependanciesMap = 
-            new DependancyDictionaryFluentBuilderAdapter();
-    private final DependancyDictionary primitives;
+    private final ResolvationMapRecordDictionaryFluentBuilderAdapter dependanciesMap = 
+            new ResolvationMapRecordDictionaryFluentBuilderAdapter();
+    private final ResolvationMapRecordDictionary primitives;
     private final LifetimeManagerInterceptor lifetimeManager = new LifetimeManagerInterceptor();
     public Resolver() {
         register(Long.class, Long.class);
@@ -47,7 +47,7 @@ public class Resolver {
         register(Byte.class, Byte.class);
         register(byte.class, Byte.class);
         register(String.class, String.class);
-        primitives = (DependancyDictionary) this.dependanciesMap.getDictionary().clone();
+        primitives = (ResolvationMapRecordDictionary) this.dependanciesMap.getDictionary().clone();
     }
 
     public Resolver(ConfigurationFile configuration) {
@@ -117,9 +117,9 @@ public class Resolver {
 
     }
 
-    public DependancyDictionary getRegisteredDependancies() {
-        DependancyDictionary ret
-                = (DependancyDictionary) this.dependanciesMap
+    public ResolvationMapRecordDictionary getRegisteredDependancies() {
+        ResolvationMapRecordDictionary ret
+                = (ResolvationMapRecordDictionary) this.dependanciesMap
                         .getDictionary().clone();
         ret.subtract(primitives);
         return ret;
