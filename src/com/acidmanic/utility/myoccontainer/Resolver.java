@@ -7,6 +7,7 @@ package com.acidmanic.utility.myoccontainer;
 
 import com.acidmanic.utility.myoccontainer.configuration.TaggedClass;
 import com.acidmanic.utility.myoccontainer.configuration.ConfigurationFile;
+import com.acidmanic.utility.myoccontainer.configuration.MapRecord;
 import com.acidmanic.utility.myoccontainer.configuration.ResolvationMapRecordDictionaryFluentBuilderAdapter;
 import com.acidmanic.utility.myoccontainer.configuration.MapRecordBuilder;
 import com.acidmanic.utility.myoccontainer.exceptions.UnableToResolveException;
@@ -21,6 +22,8 @@ import java.util.logging.Logger;
 import com.acidmanic.utility.myoccontainer.resolvestrategies.ResolveStrategy;
 import com.acidmanic.utility.myoccontainer.resolvestrategies.TagOnlyResolveStrategy;
 import com.acidmanic.utility.myoccontainer.resolvestrategies.TagOrDefaultResolveStrategy;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -115,6 +118,28 @@ public class Resolver {
         return lifetimeManager.makeObject(resolved, 
                 () -> createObject(resolved.getTargetType(), tagIfAny, strategy));
 
+    }
+    
+    
+    private void tryCreateObject(ArrayList<Object> list,
+            MapRecord record,
+            ResolveStrategy strategy){
+        try {
+            list.add(
+                    createObject(record.getTaggedClass().getType(),
+                            record.getTaggedClass().getTag(),strategy)
+            );
+        } catch (Exception e) {
+        }
+    }
+    
+    public Object[] resolveAll(Class resolving){
+        List<MapRecord> allrecords = this.dependanciesMap.getAll(resolving);
+        ArrayList<Object> allObjects = new ArrayList<>();
+        ResolveStrategy strategy = new 
+            TagOnlyResolveStrategy(this.dependanciesMap.getDictionary());
+        allrecords.forEach((record) -> tryCreateObject(allObjects, record,strategy));
+        return allObjects.toArray();
     }
 
     public ResolvationMapRecordDictionary getRegisteredDependancies() {
