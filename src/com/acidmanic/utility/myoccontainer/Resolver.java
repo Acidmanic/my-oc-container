@@ -126,11 +126,10 @@ public class Resolver {
             ResolveStrategy strategy){
         try {
             list.add(
-                    createObject(record.getTaggedClass().getType(),
+                    createObject(record.getResolveArguments().getTargetType(),
                             record.getTaggedClass().getTag(),strategy)
             );
-        } catch (Exception e) {
-        }
+        } catch (Exception e) {        }
     }
     
     public Object[] resolveAll(Class resolving){

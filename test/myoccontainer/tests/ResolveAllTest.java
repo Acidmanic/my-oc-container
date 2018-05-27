@@ -5,21 +5,13 @@
  */
 package myoccontainer.tests;
 
+import myoccontainer.models.animals.Horse;
+import myoccontainer.models.animals.Animal;
+import myoccontainer.models.animals.Chicken;
+import myoccontainer.models.animals.Frog;
+import myoccontainer.models.animals.Dog;
+import myoccontainer.models.animals.Cat;
 import com.acidmanic.utility.myoccontainer.Resolver;
-import com.acidmanic.utility.myoccontainer.configuration.ConfigurationFile;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import myoccontainer.models.BlueCarBody;
-import myoccontainer.models.Body;
-import myoccontainer.models.Car;
-import myoccontainer.models.CarMotor;
-import myoccontainer.models.Electrics;
-import myoccontainer.models.FastElectrics;
-import myoccontainer.models.HeavySilanders;
-import myoccontainer.models.Motor;
-import myoccontainer.models.Silanders;
-import myoccontainer.models.SportWheel;
-import myoccontainer.models.Wheel;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -27,47 +19,36 @@ import org.junit.Test;
  *
  * @author diego
  */
-public class ManualRegister {
+public class ResolveAllTest {
+    
+    
+    
+    
     
     
     
     private final Resolver resolver = new Resolver();
 
-    public ManualRegister() {
+    public ResolveAllTest() {
     
-        resolver.register(Car.class, Car.class);
-        resolver.register(Body.class, BlueCarBody.class);
-        resolver.register(Wheel.class, SportWheel.class);
-        resolver.register(Silanders.class, HeavySilanders.class);
-        resolver.register(Electrics.class, FastElectrics.class);
-        resolver.register(Motor.class, CarMotor.class);
-    
+        resolver.register().bind(Animal.class).to(Cat.class).tagged("cute");
+        resolver.register().bind(Animal.class).to(Dog.class).tagged("loyal");
+        resolver.register().bind(Animal.class).to(Frog.class).tagged("funny");
+        resolver.register().bind(Animal.class).to(Horse.class).tagged("nobel");
+        resolver.register().bind(Animal.class).to(Chicken.class).tagged("food");
     }
     
     
     
     @Test
-    public void resolveCar(){
-        try {
-            Car car = (Car) resolver.resolve(Car.class);
-            car.print();
-            Assert.assertTrue(true);
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
-            Assert.fail(ex.getMessage());
+    public void resolveAllTest(){
+        System.out.println("--- resolveAllTest ---");
+        Object[] allAnimals = resolver.resolveAll(Animal.class);
+        for(Object aobject:allAnimals){
+            Animal animal = (Animal) aobject;
+            System.out.println("Animal: " + animal.getName());
         }
-        
-    }
-    
-    @Test
-    public void testSave(){
-        try {
-            ConfigurationFile.save("config.config", resolver.getRegisteredDependancies());
-            Assert.assertTrue(true);
-        } catch (Exception ex) {
-            Logger.getLogger(ManualRegister.class.getName()).log(Level.SEVERE, null, ex);
-            Assert.fail();
-        }
+        Assert.assertEquals(5, allAnimals.length);
     }
     
     
