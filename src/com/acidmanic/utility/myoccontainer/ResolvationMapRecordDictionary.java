@@ -15,14 +15,15 @@ import java.util.List;
  *
  * @author diego
  */
-public class DependancyDictionary implements MaprecordDictionary {
+public class ResolvationMapRecordDictionary implements ResolvationMapRecordDictionaryInterface {
 
     private ArrayList<MapRecord> mappingRecords;
     private HashMap<String, MapRecord> tagIndexes;
-
-    public DependancyDictionary() {
+    private HashMap<String,ArrayList<MapRecord>> recordsPerClass;
+    public ResolvationMapRecordDictionary() {
         this.mappingRecords = new ArrayList<>();
         this.tagIndexes = new HashMap<>();
+        this.recordsPerClass = new HashMap<>();
     }
 
     private String getUniqueString(MapRecord record) {
@@ -45,6 +46,11 @@ public class DependancyDictionary implements MaprecordDictionary {
     public void put(MapRecord record) {
         this.mappingRecords.add(record);
         this.tagIndexes.put(getUniqueString(record), record);
+        String classname = record.getTaggedClass().getType().getName();
+        if(this.recordsPerClass.containsKey(classname)==false){
+            this.recordsPerClass.put(classname, new ArrayList<>());
+        }
+        this.recordsPerClass.get(classname).add(record);
     }
 
     @Override
@@ -78,10 +84,11 @@ public class DependancyDictionary implements MaprecordDictionary {
 
     @Override
     @SuppressWarnings({"CloneDoesntCallSuperClone", "CloneDeclaresCloneNotSupported"})
-    public DependancyDictionary clone() {
-        DependancyDictionary ret = new DependancyDictionary();
+    public ResolvationMapRecordDictionary clone() {
+        ResolvationMapRecordDictionary ret = new ResolvationMapRecordDictionary();
         ret.mappingRecords = (ArrayList<MapRecord>) this.mappingRecords.clone();
         ret.tagIndexes = (HashMap<String, MapRecord>) this.tagIndexes.clone();
+        ret.recordsPerClass = (HashMap<String, ArrayList<MapRecord>>) this.recordsPerClass.clone();
         return ret;
     }
 
@@ -93,12 +100,17 @@ public class DependancyDictionary implements MaprecordDictionary {
     }
 
     @Override
-    public void putAll(DependancyDictionary dictionary) {
-        this.mappingRecords.addAll(dictionary.mappingRecords);
+    public void putAll(ResolvationMapRecordDictionary dictionary) {
+        dictionary.mappingRecords.forEach((record)-> this.put(record));
     }
 
     @Override
-    public void subtract(DependancyDictionary dictionary) {
+    public void subtract(ResolvationMapRecordDictionary dictionary) {
         this.mappingRecords.removeAll(dictionary.mappingRecords);
+    }
+
+    @Override
+    public List<MapRecord> getAll(Class type) {
+        return this.recordsPerClass.get(type.getName());
     }
 }

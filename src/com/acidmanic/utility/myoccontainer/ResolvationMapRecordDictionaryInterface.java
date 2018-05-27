@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @author diego
  */
-public interface MaprecordDictionary {
+public interface ResolvationMapRecordDictionaryInterface {
 
     
     boolean containesAny(Class key);
@@ -21,14 +21,16 @@ public interface MaprecordDictionary {
 
     void put(MapRecord record);
 
-    void putAll(DependancyDictionary dictionary);
+    void putAll(ResolvationMapRecordDictionary dictionary);
 
     MapRecord remove(Class type, String tag);
 
     MapRecord searchForAKey(Class key);
 
-    void subtract(DependancyDictionary dictionary);
+    void subtract(ResolvationMapRecordDictionary dictionary);
 
     List<MapRecord> toList();
+    
+    List<MapRecord> getAll(Class type);
     
 }
