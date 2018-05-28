@@ -5,9 +5,9 @@
  */
 package com.acidmanic.utility.myoccontainer.configuration.serialization;
 
-import com.acidmanic.utility.myoccontainer.configuration.TaggedClass;
-import com.acidmanic.utility.myoccontainer.configuration.MapRecord;
-import com.acidmanic.utility.myoccontainer.configuration.ResolveArguments;
+import com.acidmanic.utility.myoccontainer.configuration.data.TaggedClass;
+import com.acidmanic.utility.myoccontainer.configuration.data.MapRecord;
+import com.acidmanic.utility.myoccontainer.configuration.data.ResolveArguments;
 
 /**
  *

@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.acidmanic.utility.myoccontainer;
+package com.acidmanic.utility.myoccontainer.configuration;
 
-import com.acidmanic.utility.myoccontainer.configuration.MapRecord;
+import com.acidmanic.utility.myoccontainer.configuration.data.MapRecord;
 import java.util.List;
 
 /**

@@ -5,10 +5,10 @@
  */
 package com.acidmanic.utility.myoccontainer.resolvestrategies;
 
-import com.acidmanic.utility.myoccontainer.ResolvationMapRecordDictionary;
+import com.acidmanic.utility.myoccontainer.configuration.ResolvationMapRecordDictionary;
 import com.acidmanic.utility.myoccontainer.Resolver;
-import com.acidmanic.utility.myoccontainer.configuration.TaggedClass;
-import com.acidmanic.utility.myoccontainer.configuration.ResolveArguments;
+import com.acidmanic.utility.myoccontainer.configuration.data.TaggedClass;
+import com.acidmanic.utility.myoccontainer.configuration.data.ResolveArguments;
 
 /**
  *

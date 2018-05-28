@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.acidmanic.utility.myoccontainer;
+package com.acidmanic.utility.myoccontainer.configuration;
 
-import com.acidmanic.utility.myoccontainer.configuration.MapRecord;
-import com.acidmanic.utility.myoccontainer.configuration.TaggedClass;
+import com.acidmanic.utility.myoccontainer.configuration.data.MapRecord;
+import com.acidmanic.utility.myoccontainer.configuration.data.TaggedClass;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

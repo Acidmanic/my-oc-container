@@ -5,10 +5,9 @@
  */
 package com.acidmanic.utility.myoccontainer.configuration;
 
-import com.acidmanic.utility.myoccontainer.ResolvationMapRecordDictionary;
+import com.acidmanic.utility.myoccontainer.configuration.data.MapRecord;
 import java.util.ArrayList;
 import java.util.List;
-import com.acidmanic.utility.myoccontainer.ResolvationMapRecordDictionaryInterface;
 
 /**
  *
@@ -18,7 +17,7 @@ public class ResolvationMapRecordDictionaryFluentBuilderAdapter
         implements ResolvationMapRecordDictionaryInterface {
     
     private final ResolvationMapRecordDictionary dependancyDictionary;
-    private final ArrayList<MapRecordBuilder> builders;
+    private final ArrayList<ResolvationMapRecordBuilder> builders;
     
     public ResolvationMapRecordDictionaryFluentBuilderAdapter() {
         this.dependancyDictionary = new ResolvationMapRecordDictionary();
@@ -38,7 +37,7 @@ public class ResolvationMapRecordDictionaryFluentBuilderAdapter
     }
 
     private void buildUnbuiltRecords() {
-        for(MapRecordBuilder builder:this.builders){
+        for(ResolvationMapRecordBuilder builder:this.builders){
             try {
                 this.dependancyDictionary
                     .put(builder.build());
@@ -50,8 +49,8 @@ public class ResolvationMapRecordDictionaryFluentBuilderAdapter
     }
 
     
-    public MapRecordBuilder fluent(){
-        MapRecordBuilder builder = new MapRecordBuilder();
+    public ResolvationMapRecordBuilder fluent(){
+        ResolvationMapRecordBuilder builder = new ResolvationMapRecordBuilder();
         this.builders.add(builder);
         return builder;
     }
