@@ -30,7 +30,7 @@ import java.util.List;
  *
  * @author diego
  */
-public class Resolver {
+public class Resolver implements Registerer {
 
 
     private final ResolvationMapRecordDictionaryFluentBuilderAdapter dependanciesMap = 
@@ -63,6 +63,7 @@ public class Resolver {
         this(new ConfigurationFile(filepath));
     }
 
+    @Override
     public final void register(Class resolving, Class resolved) {
         try {
             this.dependanciesMap.put(new ResolvationMapRecordBuilder()
@@ -73,24 +74,28 @@ public class Resolver {
         }
     }
 
+    @Override
     public final void register(Class resolving, Class resolved, String tag) throws Exception {
         this.dependanciesMap.put(new ResolvationMapRecordBuilder()
         .bind(resolving).to(resolved).tagged(tag)
                 .build());
     }
     
+    @Override
     public final void register(Class resolving, Class resolved, LifetimeType lifetime) throws Exception {
         this.dependanciesMap.put(new ResolvationMapRecordBuilder()
         .bind(resolving).to(resolved).livesAsA(lifetime)
                 .build());
     }
     
+    @Override
     public final void register(Class resolving, Class resolved,String tag, LifetimeType lifetime) throws Exception {
         this.dependanciesMap.put(new ResolvationMapRecordBuilder()
         .bind(resolving).to(resolved).tagged(tag).livesAsA(lifetime)
                 .build());
     }
     
+    @Override
     public final ResolvationMapRecordBuilder register(){
         return this.dependanciesMap.fluent();
     }
