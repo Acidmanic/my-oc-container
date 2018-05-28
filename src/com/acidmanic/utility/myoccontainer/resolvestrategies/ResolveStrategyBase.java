@@ -5,7 +5,7 @@
  */
 package com.acidmanic.utility.myoccontainer.resolvestrategies;
 
-import com.acidmanic.utility.myoccontainer.ResolvationMapRecordDictionary;
+import com.acidmanic.utility.myoccontainer.configuration.ResolvationMapRecordDictionary;
 
 /**
  *

@@ -5,15 +5,16 @@
  */
 package com.acidmanic.utility.myoccontainer;
 
-import com.acidmanic.utility.myoccontainer.configuration.TaggedClass;
+import com.acidmanic.utility.myoccontainer.configuration.ResolvationMapRecordDictionary;
+import com.acidmanic.utility.myoccontainer.configuration.data.TaggedClass;
 import com.acidmanic.utility.myoccontainer.configuration.ConfigurationFile;
-import com.acidmanic.utility.myoccontainer.configuration.MapRecord;
+import com.acidmanic.utility.myoccontainer.configuration.data.MapRecord;
 import com.acidmanic.utility.myoccontainer.configuration.ResolvationMapRecordDictionaryFluentBuilderAdapter;
-import com.acidmanic.utility.myoccontainer.configuration.MapRecordBuilder;
+import com.acidmanic.utility.myoccontainer.configuration.ResolvationMapRecordBuilder;
 import com.acidmanic.utility.myoccontainer.exceptions.UnableToResolveException;
 import com.acidmanic.utility.myoccontainer.lifetimemanagement.LifetimeManagerInterceptor;
 import com.acidmanic.utility.myoccontainer.lifetimemanagement.LifetimeType;
-import com.acidmanic.utility.myoccontainer.configuration.ResolveArguments;
+import com.acidmanic.utility.myoccontainer.configuration.data.ResolveArguments;
 import com.acidmanic.utility.myoccontainer.resolvestrategies.DefaultOrAnyResolveStrategy;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Parameter;
@@ -64,7 +65,7 @@ public class Resolver {
 
     public final void register(Class resolving, Class resolved) {
         try {
-            this.dependanciesMap.put(new MapRecordBuilder()
+            this.dependanciesMap.put(new ResolvationMapRecordBuilder()
                     .bind(resolving).to(resolved)
                     .build());
         } catch (Exception ex) {
@@ -73,24 +74,24 @@ public class Resolver {
     }
 
     public final void register(Class resolving, Class resolved, String tag) throws Exception {
-        this.dependanciesMap.put(new MapRecordBuilder()
+        this.dependanciesMap.put(new ResolvationMapRecordBuilder()
         .bind(resolving).to(resolved).tagged(tag)
                 .build());
     }
     
     public final void register(Class resolving, Class resolved, LifetimeType lifetime) throws Exception {
-        this.dependanciesMap.put(new MapRecordBuilder()
+        this.dependanciesMap.put(new ResolvationMapRecordBuilder()
         .bind(resolving).to(resolved).livesAsA(lifetime)
                 .build());
     }
     
     public final void register(Class resolving, Class resolved,String tag, LifetimeType lifetime) throws Exception {
-        this.dependanciesMap.put(new MapRecordBuilder()
+        this.dependanciesMap.put(new ResolvationMapRecordBuilder()
         .bind(resolving).to(resolved).tagged(tag).livesAsA(lifetime)
                 .build());
     }
     
-    public final MapRecordBuilder register(){
+    public final ResolvationMapRecordBuilder register(){
         return this.dependanciesMap.fluent();
     }
     

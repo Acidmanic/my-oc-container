@@ -5,11 +5,11 @@
  */
 package tests.serializing;
 
-import com.acidmanic.utility.myoccontainer.configuration.TaggedClass;
-import com.acidmanic.utility.myoccontainer.configuration.MapRecord;
+import com.acidmanic.utility.myoccontainer.configuration.data.TaggedClass;
+import com.acidmanic.utility.myoccontainer.configuration.data.MapRecord;
 import com.acidmanic.utility.myoccontainer.configuration.serialization.MapRecordSerializer;
 import com.acidmanic.utility.myoccontainer.lifetimemanagement.LifetimeType;
-import com.acidmanic.utility.myoccontainer.configuration.ResolveArguments;
+import com.acidmanic.utility.myoccontainer.configuration.data.ResolveArguments;
 import java.io.File;
 import java.util.ArrayList;
 import javax.xml.bind.JAXB;

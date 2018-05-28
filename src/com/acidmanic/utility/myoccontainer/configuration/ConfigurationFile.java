@@ -5,7 +5,7 @@
  */
 package com.acidmanic.utility.myoccontainer.configuration;
 
-import com.acidmanic.utility.myoccontainer.ResolvationMapRecordDictionary;
+import com.acidmanic.utility.myoccontainer.configuration.data.MapRecord;
 import com.acidmanic.utility.myoccontainer.configuration.serialization.MapRecordSerializer;
 import java.io.File;
 import java.nio.file.Files;

@@ -1,5 +1,5 @@
 
-package com.acidmanic.utility.myoccontainer.configuration;
+package com.acidmanic.utility.myoccontainer.configuration.data;
 
 import com.acidmanic.utility.myoccontainer.lifetimemanagement.LifetimeType;
 

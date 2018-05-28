@@ -4,42 +4,45 @@
  * and open the template in the editor.
  */
 package com.acidmanic.utility.myoccontainer.configuration;
+import com.acidmanic.utility.myoccontainer.configuration.data.ResolveArguments;
+import com.acidmanic.utility.myoccontainer.configuration.data.MapRecord;
+import com.acidmanic.utility.myoccontainer.configuration.data.TaggedClass;
 import com.acidmanic.utility.myoccontainer.lifetimemanagement.LifetimeType;
 
 /**
  *
  * @author diego
  */
-public class MapRecordBuilder {
+public class ResolvationMapRecordBuilder {
 
     private Class resolvingType;
     private Class resolvedType;
     private String tag;
     private LifetimeType lifetimeType;
 
-    public MapRecordBuilder() {
+    public ResolvationMapRecordBuilder() {
         this.resolvingType = Object.class;
         this.resolvedType = Object.class;
         this.tag = TaggedClass.DEFAULT_TAG;
         this.lifetimeType = LifetimeType.Transient;
     }
 
-    public MapRecordBuilder bind(Class type) {
+    public ResolvationMapRecordBuilder bind(Class type) {
         this.resolvingType = type;
         return this;
     }
 
-    public MapRecordBuilder to(Class type) {
+    public ResolvationMapRecordBuilder to(Class type) {
         this.resolvedType = type;
         return this;
     }
 
-    public MapRecordBuilder tagged(String tag) {
+    public ResolvationMapRecordBuilder tagged(String tag) {
         this.tag = tag;
         return this;
     }
 
-    public MapRecordBuilder livesAsA(LifetimeType lifetime) {
+    public ResolvationMapRecordBuilder livesAsA(LifetimeType lifetime) {
         this.lifetimeType = lifetime;
         return this;
     }
