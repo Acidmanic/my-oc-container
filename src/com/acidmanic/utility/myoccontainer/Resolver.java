@@ -126,6 +126,9 @@ public class Resolver implements Registerer {
 
     }
     
+    public void install(Installer installer){
+        installer.configure(this);
+    }
     
     private void tryCreateObject(ArrayList<Object> list,
             MapRecord record,

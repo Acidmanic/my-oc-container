@@ -10,5 +10,5 @@ package com.acidmanic.utility.myoccontainer;
  * @author diego
  */
 public interface Installer {
-    void configure(Registerer registerer);
+    void configure(Registerer myoc);
 }
