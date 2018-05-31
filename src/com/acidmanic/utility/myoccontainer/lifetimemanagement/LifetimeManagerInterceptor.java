@@ -35,6 +35,11 @@ public class LifetimeManagerInterceptor {
     
     
     public Object makeObject(ResolveArguments arguments,ObjectCreator creator) throws Exception{
+        
+        if(arguments.hasBuilder()){
+            return arguments.getBuilder().build();
+        }
+        
         String key = arguments.getTargetType().getName();
         if(arguments.getLifetime()==LifetimeType.Singleton){
             if(singletones.containsKey(key)){
