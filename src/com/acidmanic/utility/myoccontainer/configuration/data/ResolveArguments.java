@@ -26,7 +26,8 @@ public class ResolveArguments {
     
     private LifetimeType lifetime;
     private Class targetType;
-
+    private Builder builder = Builder.NULL;
+    
     public ResolveArguments(Class targetType) {
         this.targetType = targetType;
         this.lifetime = LifetimeType.Transient;
@@ -37,6 +38,15 @@ public class ResolveArguments {
         this.targetType = targetType;
     }
 
+    public ResolveArguments(LifetimeType lifetime,
+            Class targetType,
+            Builder builder) {
+        this.lifetime = lifetime;
+        this.targetType = targetType;
+        this.builder = builder;
+    }
+    
+    
     public Class getTargetType() {
         return targetType;
     }
@@ -52,6 +62,20 @@ public class ResolveArguments {
     public void setLifetime(LifetimeType lifetime) {
         this.lifetime = lifetime;
     }
+
+    public Builder getBuilder() {
+        return builder;
+    }
+
+    public void setBuilder(Builder builder) {
+        this.builder = builder;
+    }
     
+        
+    public boolean hasBuilder(){
+        if(this.builder==null) return false;
+        if(this.builder.equals(Builder.NULL)) return false;
+        return true;
+    }
     
 }
