@@ -15,6 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.acidmanic.utility.myoccontainer.configuration;
+import com.acidmanic.utility.myoccontainer.configuration.data.Builder;
 import com.acidmanic.utility.myoccontainer.configuration.data.ResolveArguments;
 import com.acidmanic.utility.myoccontainer.configuration.data.MapRecord;
 import com.acidmanic.utility.myoccontainer.configuration.data.TaggedClass;
@@ -30,7 +31,8 @@ public class ResolvationMapRecordBuilder {
     private Class resolvedType;
     private String tag;
     private LifetimeType lifetimeType;
-
+    private Builder builder=Builder.NULL;
+    
     public ResolvationMapRecordBuilder() {
         this.resolvingType = Object.class;
         this.resolvedType = Object.class;
@@ -57,10 +59,16 @@ public class ResolvationMapRecordBuilder {
         this.lifetimeType = lifetime;
         return this;
     }
+    
+    public ResolvationMapRecordBuilder withBuilder(Builder builder){
+        this.builder=builder;
+        return this;
+    }
 
     public MapRecord build() throws Exception {
         return new MapRecord(
                 new TaggedClass(this.tag, this.resolvingType), 
-                new ResolveArguments(this.lifetimeType, this.resolvedType));
+                new ResolveArguments(this.lifetimeType,
+                        this.resolvedType,this.builder));
     }
 }
