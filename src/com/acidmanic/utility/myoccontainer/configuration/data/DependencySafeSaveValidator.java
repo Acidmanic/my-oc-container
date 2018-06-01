@@ -20,9 +20,9 @@ package com.acidmanic.utility.myoccontainer.configuration.data;
  *
  * @author Mani Moayedi (acidmanic.moayedi@gmail.com)
  */
-public class ResolvationMapRecordValidator {
+public class DependencySafeSaveValidator {
 
-    public boolean isSaveSafe(MapRecord mapRecord) {
+    public boolean isSaveSafe(Dependency mapRecord) {
         if (mapRecord.getTaggedClass() == null) {
             return false;
         }

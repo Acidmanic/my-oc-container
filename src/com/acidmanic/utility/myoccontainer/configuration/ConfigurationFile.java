@@ -16,9 +16,9 @@
  */
 package com.acidmanic.utility.myoccontainer.configuration;
 
-import com.acidmanic.utility.myoccontainer.configuration.data.MapRecord;
-import com.acidmanic.utility.myoccontainer.configuration.data.ResolvationMapRecordValidator;
-import com.acidmanic.utility.myoccontainer.configuration.serialization.MapRecordSerializer;
+import com.acidmanic.utility.myoccontainer.configuration.data.Dependency;
+import com.acidmanic.utility.myoccontainer.configuration.data.DependencySafeSaveValidator;
+import com.acidmanic.utility.myoccontainer.configuration.serialization.DependencySerializer;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -31,12 +31,12 @@ import java.util.List;
  */
 public class ConfigurationFile {
 
-    private final ResolvationMapRecordDictionary dependancyMap = new ResolvationMapRecordDictionary();
+    private final DependencyDictionary dependancyMap = new DependencyDictionary();
 
     private void addLine(String line) {
 
         try {
-            MapRecord record = new MapRecordSerializer()
+            Dependency record = new DependencySerializer()
                     .deserialize(line);
             this.dependancyMap.put(record);
         } catch (Exception e) {
@@ -58,7 +58,7 @@ public class ConfigurationFile {
         this.laodFile(filePath);
     }
 
-    public ResolvationMapRecordDictionary getDependancyMap() {
+    public DependencyDictionary getDependancyMap() {
         return this.dependancyMap.clone();
     }
 
@@ -66,11 +66,11 @@ public class ConfigurationFile {
         ConfigurationFile.save(filepath, this.dependancyMap);
     }
 
-    public static void save(String filepath, ResolvationMapRecordDictionary dependancies) throws Exception {
+    public static void save(String filepath, DependencyDictionary dependancies) throws Exception {
         StringBuilder sb = new StringBuilder();
-        MapRecordSerializer serializer = new MapRecordSerializer();
-        ResolvationMapRecordValidator validator = new ResolvationMapRecordValidator();
-        for (MapRecord record : dependancies.toList()) {
+        DependencySerializer serializer = new DependencySerializer();
+        DependencySafeSaveValidator validator = new DependencySafeSaveValidator();
+        for (Dependency record : dependancies.toList()) {
             if (validator.isSaveSafe(record)) {
                 sb.append(serializer.serialize(record)).append("\n");
             }

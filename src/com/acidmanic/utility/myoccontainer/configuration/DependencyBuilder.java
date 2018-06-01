@@ -16,16 +16,16 @@
  */
 package com.acidmanic.utility.myoccontainer.configuration;
 import com.acidmanic.utility.myoccontainer.configuration.data.Builder;
-import com.acidmanic.utility.myoccontainer.configuration.data.ResolveArguments;
-import com.acidmanic.utility.myoccontainer.configuration.data.MapRecord;
-import com.acidmanic.utility.myoccontainer.configuration.data.TaggedClass;
+import com.acidmanic.utility.myoccontainer.configuration.data.ResolveParameters;
+import com.acidmanic.utility.myoccontainer.configuration.data.Dependency;
+import com.acidmanic.utility.myoccontainer.configuration.data.ResolveSource;
 import com.acidmanic.utility.myoccontainer.lifetimemanagement.LifetimeType;
 
 /**
  *
  * @author diego
  */
-public class ResolvationMapRecordBuilder {
+public class DependencyBuilder {
 
     private Class resolvingType;
     private Class resolvedType;
@@ -33,42 +33,42 @@ public class ResolvationMapRecordBuilder {
     private LifetimeType lifetimeType;
     private Builder builder=Builder.NULL;
     
-    public ResolvationMapRecordBuilder() {
+    public DependencyBuilder() {
         this.resolvingType = Object.class;
         this.resolvedType = Object.class;
-        this.tag = TaggedClass.DEFAULT_TAG;
+        this.tag = ResolveSource.DEFAULT_TAG;
         this.lifetimeType = LifetimeType.Transient;
     }
 
-    public ResolvationMapRecordBuilder bind(Class type) {
+    public DependencyBuilder bind(Class type) {
         this.resolvingType = type;
         return this;
     }
 
-    public ResolvationMapRecordBuilder to(Class type) {
+    public DependencyBuilder to(Class type) {
         this.resolvedType = type;
         return this;
     }
 
-    public ResolvationMapRecordBuilder tagged(String tag) {
+    public DependencyBuilder tagged(String tag) {
         this.tag = tag;
         return this;
     }
 
-    public ResolvationMapRecordBuilder livesAsA(LifetimeType lifetime) {
+    public DependencyBuilder livesAsA(LifetimeType lifetime) {
         this.lifetimeType = lifetime;
         return this;
     }
     
-    public ResolvationMapRecordBuilder withBuilder(Builder builder){
+    public DependencyBuilder withBuilder(Builder builder){
         this.builder=builder;
         return this;
     }
 
-    public MapRecord build() throws Exception {
-        return new MapRecord(
-                new TaggedClass(this.tag, this.resolvingType), 
-                new ResolveArguments(this.lifetimeType,
+    public Dependency build() throws Exception {
+        return new Dependency(
+                new ResolveSource(this.tag, this.resolvingType), 
+                new ResolveParameters(this.lifetimeType,
                         this.resolvedType,this.builder));
     }
 }

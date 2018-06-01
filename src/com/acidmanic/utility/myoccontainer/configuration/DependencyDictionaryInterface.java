@@ -16,32 +16,32 @@
  */
 package com.acidmanic.utility.myoccontainer.configuration;
 
-import com.acidmanic.utility.myoccontainer.configuration.data.MapRecord;
+import com.acidmanic.utility.myoccontainer.configuration.data.Dependency;
 import java.util.List;
 
 /**
  *
  * @author diego
  */
-public interface ResolvationMapRecordDictionaryInterface {
+public interface DependencyDictionaryInterface {
 
     
     boolean containesAny(Class key);
 
-    MapRecord get(Class type, String tag);
+    Dependency get(Class type, String tag);
 
-    void put(MapRecord record);
+    void put(Dependency record);
 
-    void putAll(ResolvationMapRecordDictionary dictionary);
+    void putAll(DependencyDictionary dictionary);
 
-    MapRecord remove(Class type, String tag);
+    Dependency remove(Class type, String tag);
 
-    MapRecord searchForAKey(Class key);
+    Dependency searchForAKey(Class key);
 
-    void subtract(ResolvationMapRecordDictionary dictionary);
+    void subtract(DependencyDictionary dictionary);
 
-    List<MapRecord> toList();
+    List<Dependency> toList();
     
-    List<MapRecord> getAll(Class type);
+    List<Dependency> getAll(Class type);
     
 }

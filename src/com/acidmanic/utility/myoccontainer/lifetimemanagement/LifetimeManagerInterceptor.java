@@ -16,7 +16,7 @@
  */
 package com.acidmanic.utility.myoccontainer.lifetimemanagement;
 
-import com.acidmanic.utility.myoccontainer.configuration.data.ResolveArguments;
+import com.acidmanic.utility.myoccontainer.configuration.data.ResolveParameters;
 import java.util.HashMap;
 
 /**
@@ -34,7 +34,7 @@ public class LifetimeManagerInterceptor {
     
     
     
-    public Object makeObject(ResolveArguments arguments,ObjectCreator creator) throws Exception{
+    public Object makeObject(ResolveParameters arguments,ObjectCreator creator) throws Exception{
         
         if(arguments.hasBuilder()){
             return arguments.getBuilder().build();

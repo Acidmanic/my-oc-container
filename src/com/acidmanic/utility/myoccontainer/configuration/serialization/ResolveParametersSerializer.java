@@ -18,16 +18,16 @@ package com.acidmanic.utility.myoccontainer.configuration.serialization;
 
 import com.acidmanic.utility.myoccontainer.configuration.data.Builder;
 import com.acidmanic.utility.myoccontainer.lifetimemanagement.LifetimeType;
-import com.acidmanic.utility.myoccontainer.configuration.data.ResolveArguments;
+import com.acidmanic.utility.myoccontainer.configuration.data.ResolveParameters;
 
 /**
  *
  * @author diego
  */
-public class ResolveArgumentsSerializer  extends SimpleSerializerOf<ResolveArguments>{
+public class ResolveParametersSerializer  extends SimpleSerializerOf<ResolveParameters>{
 
     @Override
-    public String serialize(ResolveArguments object) {
+    public String serialize(ResolveParameters object) {
         return object.getTargetType().getName()
                 + SEP
                 + object.getLifetime().toString()
@@ -36,12 +36,12 @@ public class ResolveArgumentsSerializer  extends SimpleSerializerOf<ResolveArgum
     }
 
     @Override
-    public ResolveArguments deserialize(String[] fields, int from) {
+    public ResolveParameters deserialize(String[] fields, int from) {
         try {
             Class targetType = Class.forName(fields[from]);
             LifetimeType lifetimeType = LifetimeType.valueOf(fields[from+1].trim());
             Builder builder = tryCreteBuilder(fields[from+2]);
-            return new ResolveArguments(lifetimeType, targetType,builder);
+            return new ResolveParameters(lifetimeType, targetType,builder);
         } catch (Exception e) {
         }
         
@@ -53,7 +53,7 @@ public class ResolveArgumentsSerializer  extends SimpleSerializerOf<ResolveArgum
         return 2;
     }
 
-    private String getBuilderClassName(ResolveArguments object) {
+    private String getBuilderClassName(ResolveParameters object) {
         try {
             if (object.hasConcreteBuilder()){
                 return object.getBuilder().getClass().getName();

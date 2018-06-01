@@ -16,11 +16,11 @@
  */
 package tests.serializing;
 
-import com.acidmanic.utility.myoccontainer.configuration.data.TaggedClass;
-import com.acidmanic.utility.myoccontainer.configuration.data.MapRecord;
-import com.acidmanic.utility.myoccontainer.configuration.serialization.MapRecordSerializer;
+import com.acidmanic.utility.myoccontainer.configuration.data.ResolveSource;
+import com.acidmanic.utility.myoccontainer.configuration.data.Dependency;
+import com.acidmanic.utility.myoccontainer.configuration.serialization.DependencySerializer;
 import com.acidmanic.utility.myoccontainer.lifetimemanagement.LifetimeType;
-import com.acidmanic.utility.myoccontainer.configuration.data.ResolveArguments;
+import com.acidmanic.utility.myoccontainer.configuration.data.ResolveParameters;
 import myoccontainer.models.Car;
 import org.junit.Assert;
 import org.junit.Test;
@@ -31,21 +31,21 @@ import org.junit.Test;
  */
 public class SimpleSerializingTest {
 
-    private final MapRecord record;
+    private final Dependency record;
 
     public SimpleSerializingTest() throws Exception {
-        record = new MapRecord(new TaggedClass("Default", Car.class), 
-                new ResolveArguments(LifetimeType.Singleton, Car.class));
+        record = new Dependency(new ResolveSource("Default", Car.class), 
+                new ResolveParameters(LifetimeType.Singleton, Car.class));
     }
 
     @Test
     public void conversionTest() {
         System.out.println("--- conversionTest -----");
 
-        String line = new MapRecordSerializer().serialize(record);
+        String line = new DependencySerializer().serialize(record);
         Assert.assertNotNull(line);
         System.out.println(line);
-        MapRecord converted = new MapRecordSerializer()
+        Dependency converted = new DependencySerializer()
                 .deserialize(line);
         Assert.assertEquals(converted.getTaggedClass().getTag(), record.getTaggedClass().getTag());
         Assert.assertEquals(converted.getTaggedClass().getType().getName(), 

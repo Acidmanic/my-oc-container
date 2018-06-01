@@ -20,31 +20,31 @@ package com.acidmanic.utility.myoccontainer.configuration.data;
  *
  * @author diego
  */
-public class MapRecord {
-    private TaggedClass taggedClass;
-    private ResolveArguments resolveArguments;
+public class Dependency {
+    private ResolveSource taggedClass;
+    private ResolveParameters resolveArguments;
 
-    public MapRecord(TaggedClass taggedClass, ResolveArguments resolveArguments) {
+    public Dependency(ResolveSource taggedClass, ResolveParameters resolveArguments) {
         this.taggedClass = taggedClass;
         this.resolveArguments = resolveArguments;
     }
 
-    public MapRecord() {
+    public Dependency() {
     }
 
-    public TaggedClass getTaggedClass() {
+    public ResolveSource getTaggedClass() {
         return taggedClass;
     }
 
-    public void setTaggedClass(TaggedClass taggedClass) {
+    public void setTaggedClass(ResolveSource taggedClass) {
         this.taggedClass = taggedClass;
     }
 
-    public ResolveArguments getResolveArguments() {
+    public ResolveParameters getResolveArguments() {
         return resolveArguments;
     }
 
-    public void setResolveArguments(ResolveArguments resolveArguments) {
+    public void setResolveArguments(ResolveParameters resolveArguments) {
         this.resolveArguments = resolveArguments;
     }
     

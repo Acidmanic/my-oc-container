@@ -16,7 +16,7 @@
  */
 package com.acidmanic.utility.myoccontainer.configuration;
 
-import com.acidmanic.utility.myoccontainer.configuration.data.MapRecord;
+import com.acidmanic.utility.myoccontainer.configuration.data.Dependency;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,19 +24,19 @@ import java.util.List;
  *
  * @author diego
  */
-public class ResolvationMapRecordDictionaryFluentBuilderAdapter
-        implements ResolvationMapRecordDictionaryInterface {
+public class DependencyDictionaryFluentBuilderAdapter
+        implements DependencyDictionaryInterface {
     
-    private final ResolvationMapRecordDictionary dependancyDictionary;
-    private final ArrayList<ResolvationMapRecordBuilder> builders;
+    private final DependencyDictionary dependancyDictionary;
+    private final ArrayList<DependencyBuilder> builders;
     
-    public ResolvationMapRecordDictionaryFluentBuilderAdapter() {
-        this.dependancyDictionary = new ResolvationMapRecordDictionary();
+    public DependencyDictionaryFluentBuilderAdapter() {
+        this.dependancyDictionary = new DependencyDictionary();
         this.builders = new ArrayList<>();
     }
     
     
-    public synchronized ResolvationMapRecordDictionary getDictionary(){
+    public synchronized DependencyDictionary getDictionary(){
         if(isAnyUnbuiltRecord()){
             buildUnbuiltRecords();
         }
@@ -48,7 +48,7 @@ public class ResolvationMapRecordDictionaryFluentBuilderAdapter
     }
 
     private void buildUnbuiltRecords() {
-        for(ResolvationMapRecordBuilder builder:this.builders){
+        for(DependencyBuilder builder:this.builders){
             try {
                 this.dependancyDictionary
                     .put(builder.build());
@@ -60,8 +60,8 @@ public class ResolvationMapRecordDictionaryFluentBuilderAdapter
     }
 
     
-    public ResolvationMapRecordBuilder fluent(){
-        ResolvationMapRecordBuilder builder = new ResolvationMapRecordBuilder();
+    public DependencyBuilder fluent(){
+        DependencyBuilder builder = new DependencyBuilder();
         this.builders.add(builder);
         return builder;
     }
@@ -74,42 +74,42 @@ public class ResolvationMapRecordDictionaryFluentBuilderAdapter
     }
 
     @Override
-    public MapRecord get(Class type, String tag) {
+    public Dependency get(Class type, String tag) {
         return this.getDictionary().get(type, tag);
     }
 
     @Override
-    public void put(MapRecord record) {
+    public void put(Dependency record) {
         this.getDictionary().put(record);
     }
 
     @Override
-    public void putAll(ResolvationMapRecordDictionary dictionary) {
+    public void putAll(DependencyDictionary dictionary) {
         this.getDictionary().putAll(dictionary);
     }
 
     @Override
-    public MapRecord remove(Class type, String tag) {
+    public Dependency remove(Class type, String tag) {
         return this.getDictionary().remove(type, tag);
     }
 
     @Override
-    public MapRecord searchForAKey(Class key) {
+    public Dependency searchForAKey(Class key) {
         return this.getDictionary().searchForAKey(key);
     }
 
     @Override
-    public void subtract(ResolvationMapRecordDictionary dictionary) {
+    public void subtract(DependencyDictionary dictionary) {
         this.getDictionary().subtract(dictionary);
     }
 
     @Override
-    public List<MapRecord> toList() {
+    public List<Dependency> toList() {
         return this.getDictionary().toList();
     }
 
     @Override
-    public List<MapRecord> getAll(Class type) {
+    public List<Dependency> getAll(Class type) {
         return this.getDictionary().getAll(type);
     }
     

@@ -22,17 +22,17 @@ import com.acidmanic.utility.myoccontainer.exceptions.InvalidTagStringException;
  *
  * @author diego
  */
-public class TaggedClass {
+public class ResolveSource {
 
     public static final String DEFAULT_TAG = "Default";
     
     private String tag;
     private Class type;
 
-    public TaggedClass() {
+    public ResolveSource() {
     }
 
-    public TaggedClass(String tag, Class type) throws Exception {
+    public ResolveSource(String tag, Class type) throws Exception {
         this.type = type;
         this.setTag(tag);
     }

@@ -16,16 +16,16 @@
  */
 package com.acidmanic.utility.myoccontainer;
 
-import com.acidmanic.utility.myoccontainer.configuration.ResolvationMapRecordDictionary;
-import com.acidmanic.utility.myoccontainer.configuration.data.TaggedClass;
+import com.acidmanic.utility.myoccontainer.configuration.DependencyDictionary;
+import com.acidmanic.utility.myoccontainer.configuration.data.ResolveSource;
 import com.acidmanic.utility.myoccontainer.configuration.ConfigurationFile;
-import com.acidmanic.utility.myoccontainer.configuration.data.MapRecord;
-import com.acidmanic.utility.myoccontainer.configuration.ResolvationMapRecordDictionaryFluentBuilderAdapter;
-import com.acidmanic.utility.myoccontainer.configuration.ResolvationMapRecordBuilder;
+import com.acidmanic.utility.myoccontainer.configuration.data.Dependency;
+import com.acidmanic.utility.myoccontainer.configuration.DependencyDictionaryFluentBuilderAdapter;
+import com.acidmanic.utility.myoccontainer.configuration.DependencyBuilder;
 import com.acidmanic.utility.myoccontainer.exceptions.UnableToResolveException;
 import com.acidmanic.utility.myoccontainer.lifetimemanagement.LifetimeManagerInterceptor;
 import com.acidmanic.utility.myoccontainer.lifetimemanagement.LifetimeType;
-import com.acidmanic.utility.myoccontainer.configuration.data.ResolveArguments;
+import com.acidmanic.utility.myoccontainer.configuration.data.ResolveParameters;
 import com.acidmanic.utility.myoccontainer.resolvestrategies.DefaultOrAnyResolveStrategy;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Parameter;
@@ -44,9 +44,9 @@ import java.util.List;
 public class Resolver implements Registerer {
 
 
-    private final ResolvationMapRecordDictionaryFluentBuilderAdapter dependanciesMap = 
-            new ResolvationMapRecordDictionaryFluentBuilderAdapter();
-    private final ResolvationMapRecordDictionary primitives;
+    private final DependencyDictionaryFluentBuilderAdapter dependanciesMap = 
+            new DependencyDictionaryFluentBuilderAdapter();
+    private final DependencyDictionary primitives;
     private final LifetimeManagerInterceptor lifetimeManager = new LifetimeManagerInterceptor();
     public Resolver() {
         register(Long.class, Long.class);
@@ -62,7 +62,7 @@ public class Resolver implements Registerer {
         register(Byte.class, Byte.class);
         register(byte.class, Byte.class);
         register(String.class, String.class);
-        primitives = (ResolvationMapRecordDictionary) this.dependanciesMap.getDictionary().clone();
+        primitives = (DependencyDictionary) this.dependanciesMap.getDictionary().clone();
     }
 
     public Resolver(ConfigurationFile configuration) {
@@ -77,7 +77,7 @@ public class Resolver implements Registerer {
     @Override
     public final void register(Class resolving, Class resolved) {
         try {
-            this.dependanciesMap.put(new ResolvationMapRecordBuilder()
+            this.dependanciesMap.put(new DependencyBuilder()
                     .bind(resolving).to(resolved)
                     .build());
         } catch (Exception ex) {
@@ -87,32 +87,32 @@ public class Resolver implements Registerer {
 
     @Override
     public final void register(Class resolving, Class resolved, String tag) throws Exception {
-        this.dependanciesMap.put(new ResolvationMapRecordBuilder()
+        this.dependanciesMap.put(new DependencyBuilder()
         .bind(resolving).to(resolved).tagged(tag)
                 .build());
     }
     
     @Override
     public final void register(Class resolving, Class resolved, LifetimeType lifetime) throws Exception {
-        this.dependanciesMap.put(new ResolvationMapRecordBuilder()
+        this.dependanciesMap.put(new DependencyBuilder()
         .bind(resolving).to(resolved).livesAsA(lifetime)
                 .build());
     }
     
     @Override
     public final void register(Class resolving, Class resolved,String tag, LifetimeType lifetime) throws Exception {
-        this.dependanciesMap.put(new ResolvationMapRecordBuilder()
+        this.dependanciesMap.put(new DependencyBuilder()
         .bind(resolving).to(resolved).tagged(tag).livesAsA(lifetime)
                 .build());
     }
     
     @Override
-    public final ResolvationMapRecordBuilder register(){
+    public final DependencyBuilder register(){
         return this.dependanciesMap.fluent();
     }
     
     public Object resolve(Class type) throws Exception {
-        return Resolver.this.resolve(type, TaggedClass.DEFAULT_TAG, 
+        return Resolver.this.resolve(type, ResolveSource.DEFAULT_TAG, 
                 new DefaultOrAnyResolveStrategy(dependanciesMap.getDictionary()));
     }
 
@@ -127,7 +127,7 @@ public class Resolver implements Registerer {
     }
 
     private Object resolve(Class resolving, String tagIfAny, ResolveStrategy strategy) throws Exception {
-        ResolveArguments resolved = strategy.search(resolving, tagIfAny);
+        ResolveParameters resolved = strategy.search(resolving, tagIfAny);
         if (resolved == null) {
             throw new UnableToResolveException();
         }
@@ -142,7 +142,7 @@ public class Resolver implements Registerer {
     }
     
     private void tryCreateObject(ArrayList<Object> list,
-            MapRecord record,
+            Dependency record,
             ResolveStrategy strategy){
         try {
             list.add(
@@ -153,7 +153,7 @@ public class Resolver implements Registerer {
     }
     
     public Object[] resolveAll(Class resolving){
-        List<MapRecord> allrecords = this.dependanciesMap.getAll(resolving);
+        List<Dependency> allrecords = this.dependanciesMap.getAll(resolving);
         ArrayList<Object> allObjects = new ArrayList<>();
         ResolveStrategy strategy = new 
             TagOnlyResolveStrategy(this.dependanciesMap.getDictionary());
@@ -161,9 +161,9 @@ public class Resolver implements Registerer {
         return allObjects.toArray();
     }
 
-    public ResolvationMapRecordDictionary getRegisteredDependancies() {
-        ResolvationMapRecordDictionary ret
-                = (ResolvationMapRecordDictionary) this.dependanciesMap
+    public DependencyDictionary getRegisteredDependancies() {
+        DependencyDictionary ret
+                = (DependencyDictionary) this.dependanciesMap
                         .getDictionary().clone();
         ret.subtract(primitives);
         return ret;

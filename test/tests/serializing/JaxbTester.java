@@ -16,9 +16,9 @@
  */
 package tests.serializing;
 
-import com.acidmanic.utility.myoccontainer.configuration.data.TaggedClass;
+import com.acidmanic.utility.myoccontainer.configuration.data.ResolveSource;
 import com.acidmanic.utility.myoccontainer.lifetimemanagement.LifetimeType;
-import com.acidmanic.utility.myoccontainer.configuration.data.ResolveArguments;
+import com.acidmanic.utility.myoccontainer.configuration.data.ResolveParameters;
 import java.io.File;
 import java.util.ArrayList;
 import javax.xml.bind.JAXB;
@@ -39,7 +39,7 @@ public class JaxbTester {
 
     private final String path = "./dist/config.xml";
 
-    private class TaggedClassProxy extends TaggedClass {
+    private class TaggedClassProxy extends ResolveSource {
 
         public TaggedClassProxy() {
         }
@@ -68,7 +68,7 @@ public class JaxbTester {
 
     }
 
-    private class ResolveArgumentsProxy extends ResolveArguments {
+    private class ResolveArgumentsProxy extends ResolveParameters {
 
         public ResolveArgumentsProxy(Class targetType) {
             super(targetType);
