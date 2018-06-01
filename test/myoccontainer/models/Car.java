@@ -25,7 +25,8 @@ public class Car {
     private final Body body;
     private final Motor motor;
     private final Wheel wheel;
-
+    private String carName="Car";
+    
     private int passedDistance=0;
     
     public Car(Body body,Motor motor,Wheel wheel) {
@@ -35,6 +36,7 @@ public class Car {
     }
     
     public void print(){
+        System.out.println("--- " + this.carName + " ---");
         System.out.println(this.body.getColor());
         System.out.println(this.motor.description());
         System.out.println(this.wheel.info());
@@ -51,6 +53,14 @@ public class Car {
 
     public void setPassedDistance(int passedDistance) {
         this.passedDistance = passedDistance;
+    }
+
+    public String getCarName() {
+        return carName;
+    }
+
+    public void setCarName(String carName) {
+        this.carName = carName;
     }
     
     

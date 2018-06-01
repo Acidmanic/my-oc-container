@@ -17,6 +17,7 @@
 package com.acidmanic.utility.myoccontainer.configuration;
 
 import com.acidmanic.utility.myoccontainer.configuration.data.MapRecord;
+import com.acidmanic.utility.myoccontainer.configuration.data.ResolvationMapRecordValidator;
 import com.acidmanic.utility.myoccontainer.configuration.serialization.MapRecordSerializer;
 import java.io.File;
 import java.nio.file.Files;
@@ -68,8 +69,11 @@ public class ConfigurationFile {
     public static void save(String filepath, ResolvationMapRecordDictionary dependancies) throws Exception {
         StringBuilder sb = new StringBuilder();
         MapRecordSerializer serializer = new MapRecordSerializer();
+        ResolvationMapRecordValidator validator = new ResolvationMapRecordValidator();
         for (MapRecord record : dependancies.toList()) {
-            sb.append(serializer.serialize(record)).append("\n");
+            if (validator.isSaveSafe(record)) {
+                sb.append(serializer.serialize(record)).append("\n");
+            }
         }
         File f = new File(filepath);
         try {
