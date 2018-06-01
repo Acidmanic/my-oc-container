@@ -16,12 +16,16 @@
  */
 package myoccontainer.tests;
 
+import com.acidmanic.utility.myoccontainer.Installer;
+import com.acidmanic.utility.myoccontainer.Registerer;
 import com.acidmanic.utility.myoccontainer.Resolver;
 import com.acidmanic.utility.myoccontainer.configuration.ConfigurationFile;
+import com.acidmanic.utility.myoccontainer.configuration.data.Builder;
 import com.acidmanic.utility.myoccontainer.lifetimemanagement.LifetimeType;
 import java.rmi.activation.Activatable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.jws.Oneway;
 import myoccontainer.models.BlueCarBody;
 import myoccontainer.models.Body;
 import myoccontainer.models.Car;
@@ -38,6 +42,7 @@ import myoccontainer.models.Silanders;
 import myoccontainer.models.SportWheel;
 import myoccontainer.models.Wheel;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -47,66 +52,78 @@ import org.junit.Test;
 public class WithBuilderTest {
 
     private final Resolver resolver = new Resolver();
-    private final String tag = "Kitty";
 
     public WithBuilderTest() throws Exception {
-
-        resolver.register().bind(Car.class).to(Car.class).livesAsA(LifetimeType.Transient);
-        resolver.register().bind(Car.class).to(Car.class).tagged(tag).livesAsA(LifetimeType.Singleton);
-        resolver.register().bind(Body.class).to(BlueCarBody.class);
-        resolver.register().bind(Body.class).to(RedCarBody.class).tagged(tag);
-        resolver.register().bind(Wheel.class).to(ClassicWheel.class);
-        resolver.register().bind(Wheel.class).to(SportWheel.class).tagged(tag);
-        resolver.register().bind(Silanders.class).to(HeavySilanders.class);
-        resolver.register().bind(Silanders.class).to(LightSilanders.class).tagged(tag);
-        resolver.register().bind(Electrics.class).to(PowerElectrics.class);
-        resolver.register().bind(Electrics.class).to(FastElectrics.class).tagged(tag);
-        resolver.register().bind(Motor.class).to(CarMotor.class);
-        resolver.register().bind(Car.class).withBuilder(()-> 
-                {
-                Car car = new Car(new RedCarBody(), 
-                new CarMotor(new PowerElectrics(), new LightSilanders()), new SportWheel());
-                car.setCarName("Custome");
-                return car;
-                        })
-                .tagged("CUSTOME");
-        
-        
+           resolver.install(new BuilderInstaller());
     }
 
-    
-    public void assertCustomeCar(Car car){
+
+    public void assertCustomeCar(Car car) {
         Assert.assertNotEquals("Car", car.getCarName());
     }
-    public void assertNotCustomeCar(Car car){
+
+    public void assertNotCustomeCar(Car car) {
         Assert.assertEquals("Car", car.getCarName());
     }
-    
+
     @Test
-    public void shouldCreateANormalCar() throws Exception{
+    public void shouldCreateANormalCar() throws Exception {
         System.out.println("---shouldCreateANormalCar---");
         Car instance = (Car) resolver.resolve(Car.class);
         Assert.assertNotNull(instance);
         assertNotCustomeCar(instance);
         instance.print();
     }
-    
+
     @Test
-    public void shouldCreateAKittyCar() throws Exception{
+    public void shouldCreateAKittyCar() throws Exception {
         System.out.println("---shouldCreateAKittyCar---");
-        Car instance = (Car) resolver.resolve(Car.class,tag);
+        Car instance = (Car) resolver.resolve(Car.class, BuilderInstaller.KITTY_TAG);
         Assert.assertNotNull(instance);
         assertNotCustomeCar(instance);
         instance.print();
     }
 
     @Test
-    public void shouldCreateACustomeCar() throws Exception{
+    public void shouldCreateACustomeCar() throws Exception {
         System.out.println("---shouldCreateACustomeCar---");
-        Car instance = (Car) resolver.resolve(Car.class,"CUSTOME");
+        Car instance = (Car) resolver.resolve(Car.class, BuilderInstaller.CUSTOME_TAG);
         Assert.assertNotNull(instance);
         assertCustomeCar(instance);
         instance.print();
     }
+
+    @Test
+    public void shouldNotBeAbleToLoadInlineBuilderExpression() throws Exception {
+        Resolver savingResolver = new Resolver();
+        savingResolver.install(new BuilderInstaller());
+        ConfigurationFile.save("dist/config.config", 
+                savingResolver.getRegisteredDependancies());
+        Resolver loadedResolver = new Resolver("dist/config.config");
+        
+        Object result = null;
+        try {
+            loadedResolver.resolveByTagOnly(Car.class,BuilderInstaller.CUSTOME_TAG);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        Assert.assertNull(result);
+        
+    }
     
+    
+    @Test
+    public void shouldBeAbleToLoadConcereteBuilder() throws Exception {
+        Resolver savingResolver = new Resolver();
+        savingResolver.install(new BuilderInstaller());
+        ConfigurationFile.save("dist/config.config", 
+                savingResolver.getRegisteredDependancies());
+        Resolver loadedResolver = new Resolver("dist/config.config");
+        
+        Car result = (Car) loadedResolver.resolveByTagOnly(Car.class,BuilderInstaller.CUSTOME_CONCERETE);
+        Assert.assertNotNull(result);
+        Assert.assertEquals(BuilderInstaller.CARNAME_CUSTOME,result.getCarName());
+        
+    }
+
 }
