@@ -16,16 +16,16 @@
  */
 package com.acidmanic.utility.myoccontainer.configuration.serialization;
 
-import com.acidmanic.utility.myoccontainer.configuration.data.TaggedClass;
+import com.acidmanic.utility.myoccontainer.configuration.data.ResolveSource;
 
 /**
  *
  * @author diego
  */
-public class TaggedClassSerializer extends SimpleSerializerOf<TaggedClass>{
+public class ResolveSourceSerializer extends SimpleSerializerOf<ResolveSource>{
 
     @Override
-    public String serialize(TaggedClass object) {
+    public String serialize(ResolveSource object) {
         return object.getType().getName() + 
                 SEP + object.getTag();
     }
@@ -36,11 +36,11 @@ public class TaggedClassSerializer extends SimpleSerializerOf<TaggedClass>{
     }
 
     @Override
-    public TaggedClass deserialize(String[] fields, int from) {
+    public ResolveSource deserialize(String[] fields, int from) {
         try {
             Class type = Class.forName(fields[from]);
             String tag = fields[from+1].trim();
-            return new TaggedClass(tag, type);
+            return new ResolveSource(tag, type);
         } catch (Exception e) {
         }
         return null;

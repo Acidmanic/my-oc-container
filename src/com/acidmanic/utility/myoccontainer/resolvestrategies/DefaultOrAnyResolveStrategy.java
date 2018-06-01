@@ -16,10 +16,9 @@
  */
 package com.acidmanic.utility.myoccontainer.resolvestrategies;
 
-import com.acidmanic.utility.myoccontainer.configuration.ResolvationMapRecordDictionary;
-import com.acidmanic.utility.myoccontainer.Resolver;
-import com.acidmanic.utility.myoccontainer.configuration.data.TaggedClass;
-import com.acidmanic.utility.myoccontainer.configuration.data.ResolveArguments;
+import com.acidmanic.utility.myoccontainer.configuration.DependencyDictionary;
+import com.acidmanic.utility.myoccontainer.configuration.data.ResolveSource;
+import com.acidmanic.utility.myoccontainer.configuration.data.ResolveParameters;
 
 /**
  *
@@ -27,16 +26,16 @@ import com.acidmanic.utility.myoccontainer.configuration.data.ResolveArguments;
  */
 public class DefaultOrAnyResolveStrategy extends ResolveStrategyBase {
 
-    public DefaultOrAnyResolveStrategy(ResolvationMapRecordDictionary dependancyDictionary) {
+    public DefaultOrAnyResolveStrategy(DependencyDictionary dependancyDictionary) {
         super(dependancyDictionary);
     }
 
     @Override
-    public ResolveArguments search(Class resolving, String tagIfAny) {
-        ResolveArguments result = null;
+    public ResolveParameters search(Class resolving, String tagIfAny) {
+        ResolveParameters result = null;
 
         try {
-            result = this.dependancyDictionary.get(resolving, TaggedClass.DEFAULT_TAG)
+            result = this.dependancyDictionary.get(resolving, ResolveSource.DEFAULT_TAG)
                     .getResolveArguments();
         } catch (Exception e) {
         }

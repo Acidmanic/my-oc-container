@@ -22,23 +22,23 @@ import com.acidmanic.utility.myoccontainer.lifetimemanagement.LifetimeType;
  *
  * @author diego
  */
-public class ResolveArguments {
+public class ResolveParameters {
 
     private LifetimeType lifetime;
     private Class targetType;
     private Builder builder = Builder.NULL;
 
-    public ResolveArguments(Class targetType) {
+    public ResolveParameters(Class targetType) {
         this.targetType = targetType;
         this.lifetime = LifetimeType.Transient;
     }
 
-    public ResolveArguments(LifetimeType lifetime, Class targetType) {
+    public ResolveParameters(LifetimeType lifetime, Class targetType) {
         this.lifetime = lifetime;
         this.targetType = targetType;
     }
 
-    public ResolveArguments(LifetimeType lifetime,
+    public ResolveParameters(LifetimeType lifetime,
             Class targetType,
             Builder builder) {
         this.lifetime = lifetime;

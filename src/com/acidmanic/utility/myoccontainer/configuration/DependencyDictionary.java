@@ -16,8 +16,8 @@
  */
 package com.acidmanic.utility.myoccontainer.configuration;
 
-import com.acidmanic.utility.myoccontainer.configuration.data.MapRecord;
-import com.acidmanic.utility.myoccontainer.configuration.data.TaggedClass;
+import com.acidmanic.utility.myoccontainer.configuration.data.Dependency;
+import com.acidmanic.utility.myoccontainer.configuration.data.ResolveSource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,22 +26,22 @@ import java.util.List;
  *
  * @author diego
  */
-public class ResolvationMapRecordDictionary implements ResolvationMapRecordDictionaryInterface {
+public class DependencyDictionary implements DependencyDictionaryInterface {
 
-    private ArrayList<MapRecord> mappingRecords;
-    private HashMap<String, MapRecord> tagIndexes;
-    private HashMap<String,ArrayList<MapRecord>> recordsPerClass;
-    public ResolvationMapRecordDictionary() {
+    private ArrayList<Dependency> mappingRecords;
+    private HashMap<String, Dependency> tagIndexes;
+    private HashMap<String,ArrayList<Dependency>> recordsPerClass;
+    public DependencyDictionary() {
         this.mappingRecords = new ArrayList<>();
         this.tagIndexes = new HashMap<>();
         this.recordsPerClass = new HashMap<>();
     }
 
-    private String getUniqueString(MapRecord record) {
+    private String getUniqueString(Dependency record) {
         return getUniqueString(record.getTaggedClass());
     }
 
-    private String getUniqueString(TaggedClass t) {
+    private String getUniqueString(ResolveSource t) {
         return getUniqueString(t.getType(), t.getTag());
     }
 
@@ -54,7 +54,7 @@ public class ResolvationMapRecordDictionary implements ResolvationMapRecordDicti
     }
 
     @Override
-    public void put(MapRecord record) {
+    public void put(Dependency record) {
         this.mappingRecords.add(record);
         this.tagIndexes.put(getUniqueString(record), record);
         String classname = record.getTaggedClass().getType().getName();
@@ -65,13 +65,13 @@ public class ResolvationMapRecordDictionary implements ResolvationMapRecordDicti
     }
 
     @Override
-    public MapRecord get(Class type, String tag) {
+    public Dependency get(Class type, String tag) {
         return this.tagIndexes.get(getUniqueString(type, tag));
     }
 
     @Override
-    public MapRecord searchForAKey(Class key) {
-        for (MapRecord record : this.mappingRecords) {
+    public Dependency searchForAKey(Class key) {
+        for (Dependency record : this.mappingRecords) {
             if (key.getName().compareTo(record.getTaggedClass().getType().getName()) == 0) {
                 return record;
             }
@@ -85,8 +85,8 @@ public class ResolvationMapRecordDictionary implements ResolvationMapRecordDicti
     }
 
     @Override
-    public MapRecord remove(Class type, String tag) {
-        MapRecord record = get(type, tag);
+    public Dependency remove(Class type, String tag) {
+        Dependency record = get(type, tag);
         String key = getUniqueString(record);
         this.mappingRecords.remove(record);
         this.tagIndexes.remove(key);
@@ -95,33 +95,33 @@ public class ResolvationMapRecordDictionary implements ResolvationMapRecordDicti
 
     @Override
     @SuppressWarnings({"CloneDoesntCallSuperClone", "CloneDeclaresCloneNotSupported"})
-    public ResolvationMapRecordDictionary clone() {
-        ResolvationMapRecordDictionary ret = new ResolvationMapRecordDictionary();
-        ret.mappingRecords = (ArrayList<MapRecord>) this.mappingRecords.clone();
-        ret.tagIndexes = (HashMap<String, MapRecord>) this.tagIndexes.clone();
-        ret.recordsPerClass = (HashMap<String, ArrayList<MapRecord>>) this.recordsPerClass.clone();
+    public DependencyDictionary clone() {
+        DependencyDictionary ret = new DependencyDictionary();
+        ret.mappingRecords = (ArrayList<Dependency>) this.mappingRecords.clone();
+        ret.tagIndexes = (HashMap<String, Dependency>) this.tagIndexes.clone();
+        ret.recordsPerClass = (HashMap<String, ArrayList<Dependency>>) this.recordsPerClass.clone();
         return ret;
     }
 
     
 
     @Override
-    public List<MapRecord> toList() {
-        return (List<MapRecord>) this.mappingRecords.clone();
+    public List<Dependency> toList() {
+        return (List<Dependency>) this.mappingRecords.clone();
     }
 
     @Override
-    public void putAll(ResolvationMapRecordDictionary dictionary) {
+    public void putAll(DependencyDictionary dictionary) {
         dictionary.mappingRecords.forEach((record)-> this.put(record));
     }
 
     @Override
-    public void subtract(ResolvationMapRecordDictionary dictionary) {
+    public void subtract(DependencyDictionary dictionary) {
         this.mappingRecords.removeAll(dictionary.mappingRecords);
     }
 
     @Override
-    public List<MapRecord> getAll(Class type) {
+    public List<Dependency> getAll(Class type) {
         return this.recordsPerClass.get(type.getName());
     }
 }

@@ -16,7 +16,7 @@
  */
 package com.acidmanic.utility.myoccontainer;
 
-import com.acidmanic.utility.myoccontainer.configuration.ResolvationMapRecordBuilder;
+import com.acidmanic.utility.myoccontainer.configuration.DependencyBuilder;
 import com.acidmanic.utility.myoccontainer.lifetimemanagement.LifetimeType;
 
 /**
@@ -33,6 +33,6 @@ public interface Registerer {
 
     void register(Class resolving, Class resolved, String tag, LifetimeType lifetime) throws Exception;
 
-    ResolvationMapRecordBuilder register();
+    DependencyBuilder register();
     
 }

@@ -14,19 +14,34 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package myoccontainer;
+package com.acidmanic.utility.myoccontainer.configuration;
+
+import com.acidmanic.utility.myoccontainer.configuration.data.Dependency;
+import java.util.List;
 
 /**
  *
  * @author diego
  */
-public class MyOCContainer {
+public interface DependencyDictionaryInterface {
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // TODO code application logic here
-    }
+    
+    boolean containesAny(Class key);
+
+    Dependency get(Class type, String tag);
+
+    void put(Dependency record);
+
+    void putAll(DependencyDictionary dictionary);
+
+    Dependency remove(Class type, String tag);
+
+    Dependency searchForAKey(Class key);
+
+    void subtract(DependencyDictionary dictionary);
+
+    List<Dependency> toList();
+    
+    List<Dependency> getAll(Class type);
     
 }

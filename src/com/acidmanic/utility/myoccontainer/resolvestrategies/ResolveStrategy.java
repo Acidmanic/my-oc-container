@@ -16,12 +16,12 @@
  */
 package com.acidmanic.utility.myoccontainer.resolvestrategies;
 
-import com.acidmanic.utility.myoccontainer.configuration.data.ResolveArguments;
+import com.acidmanic.utility.myoccontainer.configuration.data.ResolveParameters;
 
 /**
  *
  * @author diego
  */
 public interface ResolveStrategy {
-    ResolveArguments search(Class resolving,String tagIfAny);
+    ResolveParameters search(Class resolving,String tagIfAny);
 }

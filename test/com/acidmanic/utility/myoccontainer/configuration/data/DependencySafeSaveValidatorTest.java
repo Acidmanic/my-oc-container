@@ -16,8 +16,7 @@
  */
 package com.acidmanic.utility.myoccontainer.configuration.data;
 
-import com.acidmanic.utility.myoccontainer.configuration.ResolvationMapRecordBuilder;
-import com.acidmanic.utility.myoccontainer.lifetimemanagement.LifetimeType;
+import com.acidmanic.utility.myoccontainer.configuration.DependencyBuilder;
 import myoccontainer.models.Car;
 import myoccontainer.models.CarMotor;
 import myoccontainer.models.ClassicWheel;
@@ -32,19 +31,19 @@ import static org.junit.Assert.*;
  *
  * @author Mani Moayedi (acidmanic.moayedi@gmail.com)
  */
-public class ResolvationMapRecordValidatorTest {
+public class DependencySafeSaveValidatorTest {
 
     private final String INLINE_TAG="Inline";
     private final String INLINE_CARNAME="Inline Car";
     private final String BUILDER_TAG="BuilderClass";
     
-    public ResolvationMapRecordValidatorTest() {
+    public DependencySafeSaveValidatorTest() {
     }
 
     @Test
     public void anInlineBuilderIsNotSaveSafe() throws Exception {
         System.out.println("isSaveSafe");
-        MapRecord mapRecord = new ResolvationMapRecordBuilder()
+        Dependency mapRecord = new DependencyBuilder()
                 .bind(Car.class).to(Car.class)
                 .tagged(INLINE_TAG)
                 .withBuilder(
@@ -58,7 +57,7 @@ public class ResolvationMapRecordValidatorTest {
                         }
                 ).build();
                 
-        ResolvationMapRecordValidator instance = new ResolvationMapRecordValidator();
+        DependencySafeSaveValidator instance = new DependencySafeSaveValidator();
         boolean expResult = false;
         boolean result = instance.isSaveSafe(mapRecord);
         assertEquals(expResult, result);
@@ -68,11 +67,11 @@ public class ResolvationMapRecordValidatorTest {
     @Test
     public void aCarBuilderIsSaveSafe() throws Exception {
         System.out.println("isSaveSafe");
-        MapRecord mapRecord = new ResolvationMapRecordBuilder()
+        Dependency mapRecord = new DependencyBuilder()
                 .bind(Car.class).to(Car.class)
                 .tagged(BUILDER_TAG)
                 .withBuilder(new CarBuilder()).build();
-        ResolvationMapRecordValidator instance = new ResolvationMapRecordValidator();
+        DependencySafeSaveValidator instance = new DependencySafeSaveValidator();
         boolean expResult = true;
         boolean result = instance.isSaveSafe(mapRecord);
         assertEquals(expResult, result);
