@@ -16,33 +16,10 @@
  */
 package myoccontainer.tests;
 
-import com.acidmanic.utility.myoccontainer.Installer;
-import com.acidmanic.utility.myoccontainer.Registerer;
 import com.acidmanic.utility.myoccontainer.Resolver;
 import com.acidmanic.utility.myoccontainer.configuration.ConfigurationFile;
-import com.acidmanic.utility.myoccontainer.configuration.data.Builder;
-import com.acidmanic.utility.myoccontainer.lifetimemanagement.LifetimeType;
-import java.rmi.activation.Activatable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.jws.Oneway;
-import myoccontainer.models.BlueCarBody;
-import myoccontainer.models.Body;
 import myoccontainer.models.Car;
-import myoccontainer.models.CarMotor;
-import myoccontainer.models.ClassicWheel;
-import myoccontainer.models.Electrics;
-import myoccontainer.models.FastElectrics;
-import myoccontainer.models.HeavySilanders;
-import myoccontainer.models.LightSilanders;
-import myoccontainer.models.Motor;
-import myoccontainer.models.PowerElectrics;
-import myoccontainer.models.RedCarBody;
-import myoccontainer.models.Silanders;
-import myoccontainer.models.SportWheel;
-import myoccontainer.models.Wheel;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**

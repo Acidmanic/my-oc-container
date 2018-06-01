@@ -17,8 +17,6 @@
 package myoccontainer.tests;
 
 import com.acidmanic.utility.myoccontainer.Resolver;
-import java.util.ArrayList;
-import java.util.List;
 import myoccontainer.models.Car;
 import myoccontainer.models.animals.Animal;
 import org.junit.Assert;

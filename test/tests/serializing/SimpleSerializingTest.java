@@ -21,15 +21,7 @@ import com.acidmanic.utility.myoccontainer.configuration.data.MapRecord;
 import com.acidmanic.utility.myoccontainer.configuration.serialization.MapRecordSerializer;
 import com.acidmanic.utility.myoccontainer.lifetimemanagement.LifetimeType;
 import com.acidmanic.utility.myoccontainer.configuration.data.ResolveArguments;
-import java.io.File;
-import java.util.ArrayList;
-import javax.xml.bind.JAXB;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import myoccontainer.models.BlueCarBody;
-import myoccontainer.models.Body;
 import myoccontainer.models.Car;
-import myoccontainer.models.RedCarBody;
 import org.junit.Assert;
 import org.junit.Test;
 

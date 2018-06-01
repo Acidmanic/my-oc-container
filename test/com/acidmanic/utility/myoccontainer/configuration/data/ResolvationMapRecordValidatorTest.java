@@ -17,7 +17,6 @@
 package com.acidmanic.utility.myoccontainer.configuration.data;
 
 import com.acidmanic.utility.myoccontainer.configuration.ResolvationMapRecordBuilder;
-import com.acidmanic.utility.myoccontainer.lifetimemanagement.LifetimeType;
 import myoccontainer.models.Car;
 import myoccontainer.models.CarMotor;
 import myoccontainer.models.ClassicWheel;

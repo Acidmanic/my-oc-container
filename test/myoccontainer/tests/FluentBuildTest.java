@@ -19,7 +19,6 @@ package myoccontainer.tests;
 import com.acidmanic.utility.myoccontainer.Resolver;
 import com.acidmanic.utility.myoccontainer.configuration.ConfigurationFile;
 import com.acidmanic.utility.myoccontainer.lifetimemanagement.LifetimeType;
-import java.rmi.activation.Activatable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import myoccontainer.models.BlueCarBody;

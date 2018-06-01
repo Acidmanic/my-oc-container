@@ -18,7 +18,6 @@ package myoccontainer.tests;
 
 import com.acidmanic.utility.myoccontainer.Installer;
 import com.acidmanic.utility.myoccontainer.Registerer;
-import com.acidmanic.utility.myoccontainer.configuration.data.Builder;
 import com.acidmanic.utility.myoccontainer.lifetimemanagement.LifetimeType;
 import myoccontainer.models.BlueCarBody;
 import myoccontainer.models.Body;

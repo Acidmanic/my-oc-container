@@ -17,7 +17,6 @@
 package tests.serializing;
 
 import com.acidmanic.utility.myoccontainer.configuration.data.TaggedClass;
-import com.acidmanic.utility.myoccontainer.configuration.data.MapRecord;
 import com.acidmanic.utility.myoccontainer.lifetimemanagement.LifetimeType;
 import com.acidmanic.utility.myoccontainer.configuration.data.ResolveArguments;
 import java.io.File;
