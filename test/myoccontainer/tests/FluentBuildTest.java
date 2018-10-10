@@ -50,17 +50,17 @@ public class FluentBuildTest {
 
     public FluentBuildTest() throws Exception {
 
-        resolver.register().bind(Car.class).to(Car.class).livesAsA(LifetimeType.Transient);
-        resolver.register().bind(Car.class).to(Car.class).tagged(tag).livesAsA(LifetimeType.Singleton);
-        resolver.register().bind(Body.class).to(BlueCarBody.class);
-        resolver.register().bind(Body.class).to(RedCarBody.class).tagged(tag);
-        resolver.register().bind(Wheel.class).to(ClassicWheel.class);
-        resolver.register().bind(Wheel.class).to(SportWheel.class).tagged(tag);
-        resolver.register().bind(Silanders.class).to(HeavySilanders.class);
-        resolver.register().bind(Silanders.class).to(LightSilanders.class).tagged(tag);
-        resolver.register().bind(Electrics.class).to(PowerElectrics.class);
-        resolver.register().bind(Electrics.class).to(FastElectrics.class).tagged(tag);
-        resolver.register().bind(Motor.class).to(CarMotor.class);
+        resolver.getRegistery().register().bind(Car.class).to(Car.class).livesAsA(LifetimeType.Transient);
+        resolver.getRegistery().register().bind(Car.class).to(Car.class).tagged(tag).livesAsA(LifetimeType.Singleton);
+        resolver.getRegistery().register().bind(Body.class).to(BlueCarBody.class);
+        resolver.getRegistery().register().bind(Body.class).to(RedCarBody.class).tagged(tag);
+        resolver.getRegistery().register().bind(Wheel.class).to(ClassicWheel.class);
+        resolver.getRegistery().register().bind(Wheel.class).to(SportWheel.class).tagged(tag);
+        resolver.getRegistery().register().bind(Silanders.class).to(HeavySilanders.class);
+        resolver.getRegistery().register().bind(Silanders.class).to(LightSilanders.class).tagged(tag);
+        resolver.getRegistery().register().bind(Electrics.class).to(PowerElectrics.class);
+        resolver.getRegistery().register().bind(Electrics.class).to(FastElectrics.class).tagged(tag);
+        resolver.getRegistery().register().bind(Motor.class).to(CarMotor.class);
         
         
         
@@ -87,15 +87,6 @@ public class FluentBuildTest {
                 instance2.getPassedDistance());
     }
 
-    @Test
-    public void testSave() {
-        try {
-            ConfigurationFile.save("config.config", resolver.getRegisteredDependancies());
-            Assert.assertTrue(true);
-        } catch (Exception ex) {
-            Logger.getLogger(FluentBuildTest.class.getName()).log(Level.SEVERE, null, ex);
-            Assert.fail();
-        }
-    }
+
 
 }

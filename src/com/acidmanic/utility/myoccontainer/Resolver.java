@@ -139,7 +139,7 @@ public class Resolver {
         return ctor.newInstance(parameters);
     }
     
-    public Registerer register(){
+    public Registerer getRegistery(){
         return this.registery;
     }
 }
