@@ -16,6 +16,7 @@
  */
 package com.acidmanic.utility.myoccontainer;
 
+import com.acidmanic.utility.myoccontainer.configuration.DependencyDictionary;
 import com.acidmanic.utility.myoccontainer.configuration.data.ResolveSource;
 import com.acidmanic.utility.myoccontainer.configuration.data.Dependency;
 import com.acidmanic.utility.myoccontainer.exceptions.UnableToResolveException;
@@ -142,4 +143,9 @@ public class Resolver {
     public Registerer getRegistery(){
         return this.registery;
     }
+
+    public DependencyDictionary getRegisteredDependancies() {
+        return this.registery.getDependencyMap();
+    }
+
 }
