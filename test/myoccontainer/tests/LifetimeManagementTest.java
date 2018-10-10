@@ -77,8 +77,8 @@ public class LifetimeManagementTest {
     @Test
     public void kittyCarShoulbeSingleton() throws Exception {
         System.out.println("kittyCarShoulbeSingleton");
-        Car instance1 = (Car) resolver.resolve(Car.class, tag);
-        Car instance2 = (Car) resolver.resolve(Car.class, tag);
+        Car instance1 =  resolver.resolve(Car.class, tag);
+        Car instance2 =  resolver.resolve(Car.class, tag);
         instance1.move();
         Assert.assertEquals(instance1.getPassedDistance(),
                 instance2.getPassedDistance());

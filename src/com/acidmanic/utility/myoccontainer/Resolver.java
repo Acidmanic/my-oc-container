@@ -49,27 +49,27 @@ public class Resolver {
         this.registery = registery;
     }
 
-    public Object resolve(Class type) throws Exception {
-        return Resolver.this.resolve(type, ResolveSource.DEFAULT_TAG,
+    public <T> T resolve(Class type) throws Exception {
+        return (T) Resolver.this.resolve(type, ResolveSource.DEFAULT_TAG,
                 new DefaultOrAnyResolveStrategy(
                         this.registery.getDependencyMap()));
     }
 
-    public Object resolveByTagOnly(Class type, String tag) throws Exception {
-        return Resolver.this.resolve(type, tag,
+    public <T> T resolveByTagOnly(Class type, String tag) throws Exception {
+        return (T) Resolver.this.resolve(type, tag,
                 new TagOnlyResolveStrategy(this.registery.getDependencyMap()));
     }
 
-    public Object resolve(Class type, String tag) throws Exception {
-        return Resolver.this.resolve(type, tag,
+    public <T> T resolve(Class type, String tag) throws Exception {
+        return (T) Resolver.this.resolve(type, tag,
                 new TagOrDefaultResolveStrategy(this.registery.getDependencyMap()));
     }
 
-    public Object tryResolve(Class type) {
-        return tryResolve(type, null);
+    public <T> T tryResolve(Class type) {
+        return (T) tryResolve(type, null);
     }
 
-    public Object tryResolve(Class type, Object def) {
+    public <T> T tryResolve(Class type, T def) {
         try {
             return resolve(type);
         } catch (Exception e) {
@@ -77,11 +77,11 @@ public class Resolver {
         return def;
     }
 
-    public Object tryResolve(Class type, String tag) {
-        return tryResolve(type, tag, null);
+    public <T> T tryResolve(Class type, String tag) {
+        return (T) tryResolve(type, tag, null);
     }
 
-    public Object tryResolve(Class type, String tag, Object def) {
+    public <T> T tryResolve(Class type, String tag, T def) {
         try {
             return resolve(type, tag);
         } catch (Exception e) {
@@ -116,12 +116,12 @@ public class Resolver {
         }
     }
 
-    public Object[] resolveAll(Class resolving) {
+    public <T> T[] resolveAll(Class resolving) {
         List<Dependency> allrecords = this.registery.getDependencyMap().getAll(resolving);
         ArrayList<Object> allObjects = new ArrayList<>();
         ResolveStrategy strategy = new TagOnlyResolveStrategy(this.registery.getDependencyMap());
         allrecords.forEach((record) -> tryCreateObject(allObjects, record, strategy));
-        return allObjects.toArray();
+        return (T[]) allObjects.toArray();
     }
 
 
