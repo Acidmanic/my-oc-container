@@ -16,6 +16,7 @@
  */
 package myoccontainer.tests;
 
+import com.acidmanic.utility.myoccontainer.Registery;
 import com.acidmanic.utility.myoccontainer.Resolver;
 import com.acidmanic.utility.myoccontainer.configuration.ConfigurationFile;
 import myoccontainer.models.Car;
@@ -31,9 +32,8 @@ public class WithBuilderTest {
     private final Resolver resolver = new Resolver();
 
     public WithBuilderTest() throws Exception {
-           resolver.install(new BuilderInstaller());
+        resolver.install(new BuilderInstaller());
     }
-
 
     public void assertCustomeCar(Car car) {
         Assert.assertNotEquals("Car", car.getCarName());
@@ -74,33 +74,32 @@ public class WithBuilderTest {
     public void shouldNotBeAbleToLoadInlineBuilderExpression() throws Exception {
         Resolver savingResolver = new Resolver();
         savingResolver.install(new BuilderInstaller());
-        ConfigurationFile.save("dist/config.config", 
+        ConfigurationFile.save("dist/config.config",
                 savingResolver.getRegisteredDependancies());
-        Resolver loadedResolver = new Resolver("dist/config.config");
-        
+        Resolver loadedResolver = new Resolver(new Registery().register("dist/config.config"));
+
         Object result = null;
         try {
-            loadedResolver.resolveByTagOnly(Car.class,BuilderInstaller.CUSTOME_TAG);
+            loadedResolver.resolveByTagOnly(Car.class, BuilderInstaller.CUSTOME_TAG);
         } catch (Exception e) {
             System.out.println(e);
         }
         Assert.assertNull(result);
-        
+
     }
-    
-    
+
     @Test
     public void shouldBeAbleToLoadConcereteBuilder() throws Exception {
         Resolver savingResolver = new Resolver();
         savingResolver.install(new BuilderInstaller());
-        ConfigurationFile.save("dist/config.config", 
+        ConfigurationFile.save("dist/config.config",
                 savingResolver.getRegisteredDependancies());
-        Resolver loadedResolver = new Resolver("dist/config.config");
-        
-        Car result = (Car) loadedResolver.resolveByTagOnly(Car.class,BuilderInstaller.CUSTOME_CONCERETE);
+        Resolver loadedResolver = new Resolver(new Registery().register("dist/config.config"));
+
+        Car result = (Car) loadedResolver.resolveByTagOnly(Car.class, BuilderInstaller.CUSTOME_CONCERETE);
         Assert.assertNotNull(result);
-        Assert.assertEquals(BuilderInstaller.CARNAME_CUSTOME,result.getCarName());
-        
+        Assert.assertEquals(BuilderInstaller.CARNAME_CUSTOME, result.getCarName());
+
     }
 
 }

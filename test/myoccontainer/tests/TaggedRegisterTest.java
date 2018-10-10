@@ -49,16 +49,16 @@ public class TaggedRegisterTest {
 
     public TaggedRegisterTest() throws Exception {
 
-        resolver.register(Car.class, Car.class);
-        resolver.register(Body.class, BlueCarBody.class);
-        resolver.register(Body.class, RedCarBody.class, tag);
-        resolver.register(Wheel.class, ClassicWheel.class);
-        resolver.register(Wheel.class, SportWheel.class,tag);
-        resolver.register(Silanders.class, LightSilanders.class,tag);
-        resolver.register(Silanders.class, HeavySilanders.class);
-        resolver.register(Electrics.class, PowerElectrics.class);
-        resolver.register(Electrics.class, FastElectrics.class,tag);
-        resolver.register(Motor.class, CarMotor.class);
+        resolver.getRegistery().register(Car.class, Car.class);
+        resolver.getRegistery().register(Body.class, BlueCarBody.class);
+        resolver.getRegistery().register(Body.class, RedCarBody.class, tag);
+        resolver.getRegistery().register(Wheel.class, ClassicWheel.class);
+        resolver.getRegistery().register(Wheel.class, SportWheel.class, tag);
+        resolver.getRegistery().register(Silanders.class, LightSilanders.class, tag);
+        resolver.getRegistery().register(Silanders.class, HeavySilanders.class);
+        resolver.getRegistery().register(Electrics.class, PowerElectrics.class);
+        resolver.getRegistery().register(Electrics.class, FastElectrics.class, tag);
+        resolver.getRegistery().register(Motor.class, CarMotor.class);
 
     }
 
@@ -75,8 +75,7 @@ public class TaggedRegisterTest {
         }
 
     }
-    
-    
+
     @Test
     public void resolveTaggedCarTest() {
         System.out.println("resolveTaggedCarTest");
@@ -90,7 +89,6 @@ public class TaggedRegisterTest {
         }
 
     }
-    
 
     @Test
     public void testSave() {
@@ -98,9 +96,9 @@ public class TaggedRegisterTest {
             ConfigurationFile.save("config.config", resolver.getRegisteredDependancies());
             Assert.assertTrue(true);
         } catch (Exception ex) {
-            Logger.getLogger(TaggedRegisterTest.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LifetimeManagementTest.class.getName()).log(Level.SEVERE, null, ex);
             Assert.fail();
         }
     }
-
+    
 }
