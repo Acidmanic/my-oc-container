@@ -92,10 +92,12 @@ public class Registery implements Registerer {
         return this.dependanciesMap.getDictionary();
     }
     
-    public void register(ConfigurationFile configuration){
+    public Registery register(ConfigurationFile configuration){
         this.dependanciesMap.putAll(configuration.getDependancyMap());
+        return this;
     }
-    public void register(String filepath){
+    public Registery register(String filepath){
         this.register(new ConfigurationFile(filepath));
+        return this;
     }
 }
