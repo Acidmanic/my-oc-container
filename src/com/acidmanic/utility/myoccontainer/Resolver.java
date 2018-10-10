@@ -145,7 +145,7 @@ public class Resolver {
     }
 
     public DependencyDictionary getRegisteredDependancies() {
-        return this.registery.getDependencyMap();
+        return this.registery.getRegisteredDependencies();
     }
 
 }

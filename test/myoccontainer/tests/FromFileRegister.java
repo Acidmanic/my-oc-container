@@ -33,11 +33,11 @@ public class FromFileRegister {
 
     private final Resolver resolver;
 
+    
+    
     public FromFileRegister() {
 
-        Registery reg = new Registery();
-        reg.register("config.config");
-        resolver = new Resolver(reg);
+        resolver = new Resolver(new Registery().register("config.config"));
 
     }
 
