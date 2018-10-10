@@ -43,11 +43,11 @@ import java.util.List;
  */
 public class Resolver implements Registerer {
 
-
-    private final DependencyDictionaryFluentBuilderAdapter dependanciesMap = 
-            new DependencyDictionaryFluentBuilderAdapter();
+    private final DependencyDictionaryFluentBuilderAdapter dependanciesMap
+            = new DependencyDictionaryFluentBuilderAdapter();
     private final DependencyDictionary primitives;
     private final LifetimeManagerInterceptor lifetimeManager = new LifetimeManagerInterceptor();
+
     public Resolver() {
         register(Long.class, Long.class);
         register(long.class, Long.class);
@@ -88,42 +88,66 @@ public class Resolver implements Registerer {
     @Override
     public final void register(Class resolving, Class resolved, String tag) throws Exception {
         this.dependanciesMap.put(new DependencyBuilder()
-        .bind(resolving).to(resolved).tagged(tag)
+                .bind(resolving).to(resolved).tagged(tag)
                 .build());
     }
-    
+
     @Override
     public final void register(Class resolving, Class resolved, LifetimeType lifetime) throws Exception {
         this.dependanciesMap.put(new DependencyBuilder()
-        .bind(resolving).to(resolved).livesAsA(lifetime)
+                .bind(resolving).to(resolved).livesAsA(lifetime)
                 .build());
     }
-    
+
     @Override
-    public final void register(Class resolving, Class resolved,String tag, LifetimeType lifetime) throws Exception {
+    public final void register(Class resolving, Class resolved, String tag, LifetimeType lifetime) throws Exception {
         this.dependanciesMap.put(new DependencyBuilder()
-        .bind(resolving).to(resolved).tagged(tag).livesAsA(lifetime)
+                .bind(resolving).to(resolved).tagged(tag).livesAsA(lifetime)
                 .build());
     }
-    
+
     @Override
-    public final DependencyBuilder register(){
+    public final DependencyBuilder register() {
         return this.dependanciesMap.fluent();
     }
-    
+
     public Object resolve(Class type) throws Exception {
-        return Resolver.this.resolve(type, ResolveSource.DEFAULT_TAG, 
+        return Resolver.this.resolve(type, ResolveSource.DEFAULT_TAG,
                 new DefaultOrAnyResolveStrategy(dependanciesMap.getDictionary()));
     }
 
     public Object resolveByTagOnly(Class type, String tag) throws Exception {
-        return Resolver.this.resolve(type, tag, 
+        return Resolver.this.resolve(type, tag,
                 new TagOnlyResolveStrategy(dependanciesMap.getDictionary()));
     }
 
     public Object resolve(Class type, String tag) throws Exception {
-        return Resolver.this.resolve(type, tag, 
+        return Resolver.this.resolve(type, tag,
                 new TagOrDefaultResolveStrategy(dependanciesMap.getDictionary()));
+    }
+
+    public Object tryResolve(Class type) {
+        return tryResolve(type, null);
+    }
+
+    public Object tryResolve(Class type, Object def) {
+        try {
+            return resolve(type);
+        } catch (Exception e) {
+        }
+        return def;
+    }
+    
+    public Object tryResolve(Class type,String tag) {
+        return tryResolve(type,tag, null);
+    }
+
+    public Object tryResolve(Class type,String tag, Object def) {
+        try {
+            return resolve(type,tag);
+        } catch (Exception e) {
+        }
+        return def;
     }
 
     private Object resolve(Class resolving, String tagIfAny, ResolveStrategy strategy) throws Exception {
@@ -131,40 +155,40 @@ public class Resolver implements Registerer {
         if (resolved == null) {
             throw new UnableToResolveException();
         }
-        
-        return lifetimeManager.makeObject(resolved, 
+
+        return lifetimeManager.makeObject(resolved,
                 () -> createObject(resolved.getTargetType(), tagIfAny, strategy));
 
     }
-    
-    public void install(Installer installer){
+
+    public void install(Installer installer) {
         installer.configure(this);
     }
-    
+
     private void tryCreateObject(ArrayList<Object> list,
             Dependency record,
-            ResolveStrategy strategy){
+            ResolveStrategy strategy) {
         try {
             list.add(
                     createObject(record.getResolveArguments().getTargetType(),
-                            record.getTaggedClass().getTag(),strategy)
+                            record.getTaggedClass().getTag(), strategy)
             );
-        } catch (Exception e) {        }
+        } catch (Exception e) {
+        }
     }
-    
-    public Object[] resolveAll(Class resolving){
+
+    public Object[] resolveAll(Class resolving) {
         List<Dependency> allrecords = this.dependanciesMap.getAll(resolving);
         ArrayList<Object> allObjects = new ArrayList<>();
-        ResolveStrategy strategy = new 
-            TagOnlyResolveStrategy(this.dependanciesMap.getDictionary());
-        allrecords.forEach((record) -> tryCreateObject(allObjects, record,strategy));
+        ResolveStrategy strategy = new TagOnlyResolveStrategy(this.dependanciesMap.getDictionary());
+        allrecords.forEach((record) -> tryCreateObject(allObjects, record, strategy));
         return allObjects.toArray();
     }
 
     public DependencyDictionary getRegisteredDependancies() {
         DependencyDictionary ret
                 = (DependencyDictionary) this.dependanciesMap
-                        .getDictionary().clone();
+                .getDictionary().clone();
         ret.subtract(primitives);
         return ret;
     }
