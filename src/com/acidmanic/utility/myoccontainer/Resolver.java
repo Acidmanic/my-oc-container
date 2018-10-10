@@ -16,21 +16,14 @@
  */
 package com.acidmanic.utility.myoccontainer;
 
-import com.acidmanic.utility.myoccontainer.configuration.DependencyDictionary;
 import com.acidmanic.utility.myoccontainer.configuration.data.ResolveSource;
-import com.acidmanic.utility.myoccontainer.configuration.ConfigurationFile;
 import com.acidmanic.utility.myoccontainer.configuration.data.Dependency;
-import com.acidmanic.utility.myoccontainer.configuration.DependencyDictionaryFluentBuilderAdapter;
-import com.acidmanic.utility.myoccontainer.configuration.DependencyBuilder;
 import com.acidmanic.utility.myoccontainer.exceptions.UnableToResolveException;
 import com.acidmanic.utility.myoccontainer.lifetimemanagement.LifetimeManagerInterceptor;
-import com.acidmanic.utility.myoccontainer.lifetimemanagement.LifetimeType;
 import com.acidmanic.utility.myoccontainer.configuration.data.ResolveParameters;
 import com.acidmanic.utility.myoccontainer.resolvestrategies.DefaultOrAnyResolveStrategy;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Parameter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import com.acidmanic.utility.myoccontainer.resolvestrategies.ResolveStrategy;
 import com.acidmanic.utility.myoccontainer.resolvestrategies.TagOnlyResolveStrategy;
 import com.acidmanic.utility.myoccontainer.resolvestrategies.TagOrDefaultResolveStrategy;
@@ -41,89 +34,34 @@ import java.util.List;
  *
  * @author diego
  */
-public class Resolver implements Registerer {
+public class Resolver {
 
-    private final DependencyDictionaryFluentBuilderAdapter dependanciesMap
-            = new DependencyDictionaryFluentBuilderAdapter();
-    private final DependencyDictionary primitives;
+
     private final LifetimeManagerInterceptor lifetimeManager = new LifetimeManagerInterceptor();
+    private final Registery registery;
 
     public Resolver() {
-        register(Long.class, Long.class);
-        register(long.class, Long.class);
-        register(Integer.class, Integer.class);
-        register(int.class, Integer.class);
-        register(Short.class, Short.class);
-        register(short.class, Short.class);
-        register(Double.class, Double.class);
-        register(double.class, Double.class);
-        register(Float.class, Float.class);
-        register(float.class, Float.class);
-        register(Byte.class, Byte.class);
-        register(byte.class, Byte.class);
-        register(String.class, String.class);
-        primitives = (DependencyDictionary) this.dependanciesMap.getDictionary().clone();
+        this.registery = new Registery();
     }
 
-    public Resolver(ConfigurationFile configuration) {
-        this();
-        this.dependanciesMap.putAll(configuration.getDependancyMap());
-    }
-
-    public Resolver(String filepath) {
-        this(new ConfigurationFile(filepath));
-    }
-
-    @Override
-    public final void register(Class resolving, Class resolved) {
-        try {
-            this.dependanciesMap.put(new DependencyBuilder()
-                    .bind(resolving).to(resolved)
-                    .build());
-        } catch (Exception ex) {
-            Logger.getLogger(Resolver.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    @Override
-    public final void register(Class resolving, Class resolved, String tag) throws Exception {
-        this.dependanciesMap.put(new DependencyBuilder()
-                .bind(resolving).to(resolved).tagged(tag)
-                .build());
-    }
-
-    @Override
-    public final void register(Class resolving, Class resolved, LifetimeType lifetime) throws Exception {
-        this.dependanciesMap.put(new DependencyBuilder()
-                .bind(resolving).to(resolved).livesAsA(lifetime)
-                .build());
-    }
-
-    @Override
-    public final void register(Class resolving, Class resolved, String tag, LifetimeType lifetime) throws Exception {
-        this.dependanciesMap.put(new DependencyBuilder()
-                .bind(resolving).to(resolved).tagged(tag).livesAsA(lifetime)
-                .build());
-    }
-
-    @Override
-    public final DependencyBuilder register() {
-        return this.dependanciesMap.fluent();
+    public Resolver(Registery registery) {
+        this.registery = registery;
     }
 
     public Object resolve(Class type) throws Exception {
         return Resolver.this.resolve(type, ResolveSource.DEFAULT_TAG,
-                new DefaultOrAnyResolveStrategy(dependanciesMap.getDictionary()));
+                new DefaultOrAnyResolveStrategy(
+                        this.registery.getDependencyMap()));
     }
 
     public Object resolveByTagOnly(Class type, String tag) throws Exception {
         return Resolver.this.resolve(type, tag,
-                new TagOnlyResolveStrategy(dependanciesMap.getDictionary()));
+                new TagOnlyResolveStrategy(this.registery.getDependencyMap()));
     }
 
     public Object resolve(Class type, String tag) throws Exception {
         return Resolver.this.resolve(type, tag,
-                new TagOrDefaultResolveStrategy(dependanciesMap.getDictionary()));
+                new TagOrDefaultResolveStrategy(this.registery.getDependencyMap()));
     }
 
     public Object tryResolve(Class type) {
@@ -137,14 +75,14 @@ public class Resolver implements Registerer {
         }
         return def;
     }
-    
-    public Object tryResolve(Class type,String tag) {
-        return tryResolve(type,tag, null);
+
+    public Object tryResolve(Class type, String tag) {
+        return tryResolve(type, tag, null);
     }
 
-    public Object tryResolve(Class type,String tag, Object def) {
+    public Object tryResolve(Class type, String tag, Object def) {
         try {
-            return resolve(type,tag);
+            return resolve(type, tag);
         } catch (Exception e) {
         }
         return def;
@@ -162,7 +100,7 @@ public class Resolver implements Registerer {
     }
 
     public void install(Installer installer) {
-        installer.configure(this);
+        installer.configure(this.registery);
     }
 
     private void tryCreateObject(ArrayList<Object> list,
@@ -178,20 +116,13 @@ public class Resolver implements Registerer {
     }
 
     public Object[] resolveAll(Class resolving) {
-        List<Dependency> allrecords = this.dependanciesMap.getAll(resolving);
+        List<Dependency> allrecords = this.registery.getDependencyMap().getAll(resolving);
         ArrayList<Object> allObjects = new ArrayList<>();
-        ResolveStrategy strategy = new TagOnlyResolveStrategy(this.dependanciesMap.getDictionary());
+        ResolveStrategy strategy = new TagOnlyResolveStrategy(this.registery.getDependencyMap());
         allrecords.forEach((record) -> tryCreateObject(allObjects, record, strategy));
         return allObjects.toArray();
     }
 
-    public DependencyDictionary getRegisteredDependancies() {
-        DependencyDictionary ret
-                = (DependencyDictionary) this.dependanciesMap
-                .getDictionary().clone();
-        ret.subtract(primitives);
-        return ret;
-    }
 
     private Object createObject(Class resolvedType, String tagIfAny, ResolveStrategy strategy) throws Exception {
         Constructor[] constructors = resolvedType.getConstructors();
@@ -206,5 +137,9 @@ public class Resolver implements Registerer {
                     tagIfAny, strategy);
         }
         return ctor.newInstance(parameters);
+    }
+    
+    public Registerer register(){
+        return this.registery;
     }
 }
