@@ -74,9 +74,9 @@ public class WithBuilderTest {
     public void shouldNotBeAbleToLoadInlineBuilderExpression() throws Exception {
         Resolver savingResolver = new Resolver();
         savingResolver.install(new BuilderInstaller());
-        ConfigurationFile.save("dist/config.config",
+        ConfigurationFile.save("config.config",
                 savingResolver.getRegisteredDependancies());
-        Resolver loadedResolver = new Resolver(new Registery().register("dist/config.config"));
+        Resolver loadedResolver = new Resolver(new Registery().register("config.config"));
 
         Object result = null;
         try {
@@ -92,9 +92,9 @@ public class WithBuilderTest {
     public void shouldBeAbleToLoadConcereteBuilder() throws Exception {
         Resolver savingResolver = new Resolver();
         savingResolver.install(new BuilderInstaller());
-        ConfigurationFile.save("dist/config.config",
+        ConfigurationFile.save("config.config",
                 savingResolver.getRegisteredDependancies());
-        Resolver loadedResolver = new Resolver(new Registery().register("dist/config.config"));
+        Resolver loadedResolver = new Resolver(new Registery().register("config.config"));
 
         Car result = (Car) loadedResolver.resolveByTagOnly(Car.class, BuilderInstaller.CUSTOME_CONCERETE);
         Assert.assertNotNull(result);
