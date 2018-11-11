@@ -42,11 +42,11 @@ public class ResolveAllTest {
 
     public ResolveAllTest() {
     
-        resolver.register().bind(Animal.class).to(Cat.class).tagged("cute");
-        resolver.register().bind(Animal.class).to(Dog.class).tagged("loyal");
-        resolver.register().bind(Animal.class).to(Frog.class).tagged("funny");
-        resolver.register().bind(Animal.class).to(Horse.class).tagged("nobel");
-        resolver.register().bind(Animal.class).to(Chicken.class).tagged("food");
+        resolver.getRegistery().register().bind(Animal.class).to(Cat.class).tagged("cute");
+        resolver.getRegistery().register().bind(Animal.class).to(Dog.class).tagged("loyal");
+        resolver.getRegistery().register().bind(Animal.class).to(Frog.class).tagged("funny");
+        resolver.getRegistery().register().bind(Animal.class).to(Horse.class).tagged("nobel");
+        resolver.getRegistery().register().bind(Animal.class).to(Chicken.class).tagged("food");
     }
     
     

@@ -50,17 +50,17 @@ public class LifetimeManagementTest {
 
     public LifetimeManagementTest() throws Exception {
 
-        resolver.register(Car.class, Car.class,LifetimeType.Transient);
-        resolver.register(Car.class, Car.class,tag,LifetimeType.Singleton);
-        resolver.register(Body.class, BlueCarBody.class);
-        resolver.register(Body.class, RedCarBody.class, tag);
-        resolver.register(Wheel.class, ClassicWheel.class);
-        resolver.register(Wheel.class, SportWheel.class,tag);
-        resolver.register(Silanders.class, LightSilanders.class,tag);
-        resolver.register(Silanders.class, HeavySilanders.class);
-        resolver.register(Electrics.class, PowerElectrics.class);
-        resolver.register(Electrics.class, FastElectrics.class,tag);
-        resolver.register(Motor.class, CarMotor.class);
+        resolver.getRegistery().register(Car.class, Car.class, LifetimeType.Transient);
+        resolver.getRegistery().register(Car.class, Car.class, tag, LifetimeType.Singleton);
+        resolver.getRegistery().register(Body.class, BlueCarBody.class);
+        resolver.getRegistery().register(Body.class, RedCarBody.class, tag);
+        resolver.getRegistery().register(Wheel.class, ClassicWheel.class);
+        resolver.getRegistery().register(Wheel.class, SportWheel.class, tag);
+        resolver.getRegistery().register(Silanders.class, LightSilanders.class, tag);
+        resolver.getRegistery().register(Silanders.class, HeavySilanders.class);
+        resolver.getRegistery().register(Electrics.class, PowerElectrics.class);
+        resolver.getRegistery().register(Electrics.class, FastElectrics.class, tag);
+        resolver.getRegistery().register(Motor.class, CarMotor.class);
 
     }
 
@@ -70,18 +70,17 @@ public class LifetimeManagementTest {
         Car instance1 = (Car) resolver.resolve(Car.class);
         Car instance2 = (Car) resolver.resolve(Car.class);
         instance1.move();
-        Assert.assertNotEquals(instance1.getPassedDistance(), 
+        Assert.assertNotEquals(instance1.getPassedDistance(),
                 instance2.getPassedDistance());
     }
-    
-    
+
     @Test
     public void kittyCarShoulbeSingleton() throws Exception {
         System.out.println("kittyCarShoulbeSingleton");
-        Car instance1 = (Car) resolver.resolve(Car.class,tag);
-        Car instance2 = (Car) resolver.resolve(Car.class,tag);
+        Car instance1 =  resolver.resolve(Car.class, tag);
+        Car instance2 =  resolver.resolve(Car.class, tag);
         instance1.move();
-        Assert.assertEquals(instance1.getPassedDistance(), 
+        Assert.assertEquals(instance1.getPassedDistance(),
                 instance2.getPassedDistance());
     }
 

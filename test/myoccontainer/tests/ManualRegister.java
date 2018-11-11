@@ -39,26 +39,22 @@ import org.junit.Test;
  * @author diego
  */
 public class ManualRegister {
-    
-    
-    
+
     private final Resolver resolver = new Resolver();
 
     public ManualRegister() {
-    
-        resolver.register(Car.class, Car.class);
-        resolver.register(Body.class, BlueCarBody.class);
-        resolver.register(Wheel.class, SportWheel.class);
-        resolver.register(Silanders.class, HeavySilanders.class);
-        resolver.register(Electrics.class, FastElectrics.class);
-        resolver.register(Motor.class, CarMotor.class);
-    
+
+        resolver.getRegistery().register(Car.class, Car.class);
+        resolver.getRegistery().register(Body.class, BlueCarBody.class);
+        resolver.getRegistery().register(Wheel.class, SportWheel.class);
+        resolver.getRegistery().register(Silanders.class, HeavySilanders.class);
+        resolver.getRegistery().register(Electrics.class, FastElectrics.class);
+        resolver.getRegistery().register(Motor.class, CarMotor.class);
+
     }
-    
-    
-    
+
     @Test
-    public void resolveCar(){
+    public void resolveCar() {
         try {
             Car car = (Car) resolver.resolve(Car.class);
             car.print();
@@ -67,20 +63,18 @@ public class ManualRegister {
             System.out.println(ex.getMessage());
             Assert.fail(ex.getMessage());
         }
-        
+
     }
-    
+
     @Test
-    public void testSave(){
+    public void testSave() {
         try {
             ConfigurationFile.save("config.config", resolver.getRegisteredDependancies());
             Assert.assertTrue(true);
         } catch (Exception ex) {
-            Logger.getLogger(ManualRegister.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LifetimeManagementTest.class.getName()).log(Level.SEVERE, null, ex);
             Assert.fail();
         }
     }
-    
-    
-    
+
 }

@@ -16,7 +16,11 @@
  */
 package myoccontainer.tests;
 
+import com.acidmanic.utility.myoccontainer.Registery;
 import com.acidmanic.utility.myoccontainer.Resolver;
+import com.acidmanic.utility.myoccontainer.configuration.ConfigurationFile;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import myoccontainer.models.Car;
 import org.junit.Assert;
 import org.junit.Test;
@@ -26,21 +30,19 @@ import org.junit.Test;
  * @author diego
  */
 public class FromFileRegister {
-    
-    
-    
+
     private final Resolver resolver;
 
+    
+    
     public FromFileRegister() {
-    
-        resolver = new Resolver("config.config");
-    
+
+        resolver = new Resolver(new Registery().register("config.config"));
+
     }
-    
-    
-    
+
     @Test
-    public void resolveCar(){
+    public void resolveCar() {
         try {
             Car car = (Car) resolver.resolve(Car.class);
             car.print();
@@ -48,9 +50,18 @@ public class FromFileRegister {
         } catch (Exception ex) {
             Assert.fail(ex.getMessage());
         }
-        
+
     }
- 
-    
-    
+
+    @Test
+    public void testSave() {
+        try {
+            ConfigurationFile.save("config.config", resolver.getRegisteredDependancies());
+            Assert.assertTrue(true);
+        } catch (Exception ex) {
+            Logger.getLogger(LifetimeManagementTest.class.getName()).log(Level.SEVERE, null, ex);
+            Assert.fail();
+        }
+    }
+
 }
