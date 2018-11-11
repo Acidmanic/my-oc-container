@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/Acidmanic/my-oc-container.svg?branch=develop)](https://travis-ci.org/Acidmanic/my-oc-container)
+![License](https://img.shields.io/badge/license-GPL--3.0-blue.svg)
+
 About
 ===== 
 
