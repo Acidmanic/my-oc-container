@@ -33,11 +33,11 @@ public class FromFileRegister {
 
     private final Resolver resolver;
 
-    
+    private final String toreadFile = "test/myoccontainer/tests/data/config.config";
     
     public FromFileRegister() {
 
-        resolver = new Resolver(new Registery().register("config.config"));
+        resolver = new Resolver(new Registery().register(toreadFile));
 
     }
 
