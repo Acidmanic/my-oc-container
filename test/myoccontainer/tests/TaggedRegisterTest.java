@@ -1,7 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* 
+ * Copyright (C) 2018 Mani Moayedi (acidmanic.moayedi@gmail.com)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package myoccontainer.tests;
 
@@ -38,16 +49,16 @@ public class TaggedRegisterTest {
 
     public TaggedRegisterTest() throws Exception {
 
-        resolver.register(Car.class, Car.class);
-        resolver.register(Body.class, BlueCarBody.class);
-        resolver.register(Body.class, RedCarBody.class, tag);
-        resolver.register(Wheel.class, ClassicWheel.class);
-        resolver.register(Wheel.class, SportWheel.class,tag);
-        resolver.register(Silanders.class, LightSilanders.class,tag);
-        resolver.register(Silanders.class, HeavySilanders.class);
-        resolver.register(Electrics.class, PowerElectrics.class);
-        resolver.register(Electrics.class, FastElectrics.class,tag);
-        resolver.register(Motor.class, CarMotor.class);
+        resolver.getRegistery().register(Car.class, Car.class);
+        resolver.getRegistery().register(Body.class, BlueCarBody.class);
+        resolver.getRegistery().register(Body.class, RedCarBody.class, tag);
+        resolver.getRegistery().register(Wheel.class, ClassicWheel.class);
+        resolver.getRegistery().register(Wheel.class, SportWheel.class, tag);
+        resolver.getRegistery().register(Silanders.class, LightSilanders.class, tag);
+        resolver.getRegistery().register(Silanders.class, HeavySilanders.class);
+        resolver.getRegistery().register(Electrics.class, PowerElectrics.class);
+        resolver.getRegistery().register(Electrics.class, FastElectrics.class, tag);
+        resolver.getRegistery().register(Motor.class, CarMotor.class);
 
     }
 
@@ -64,8 +75,7 @@ public class TaggedRegisterTest {
         }
 
     }
-    
-    
+
     @Test
     public void resolveTaggedCarTest() {
         System.out.println("resolveTaggedCarTest");
@@ -79,7 +89,6 @@ public class TaggedRegisterTest {
         }
 
     }
-    
 
     @Test
     public void testSave() {
@@ -87,9 +96,9 @@ public class TaggedRegisterTest {
             ConfigurationFile.save("config.config", resolver.getRegisteredDependancies());
             Assert.assertTrue(true);
         } catch (Exception ex) {
-            Logger.getLogger(TaggedRegisterTest.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LifetimeManagementTest.class.getName()).log(Level.SEVERE, null, ex);
             Assert.fail();
         }
     }
-
+    
 }

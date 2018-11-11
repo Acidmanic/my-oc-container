@@ -1,24 +1,35 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* 
+ * Copyright (C) 2018 Mani Moayedi (acidmanic.moayedi@gmail.com)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.acidmanic.utility.myoccontainer;
 
-import com.acidmanic.utility.myoccontainer.configuration.ConfigurationFile;
+import com.acidmanic.utility.myoccontainer.configuration.DependencyDictionary;
+import com.acidmanic.utility.myoccontainer.configuration.data.ResolveSource;
+import com.acidmanic.utility.myoccontainer.configuration.data.Dependency;
 import com.acidmanic.utility.myoccontainer.exceptions.UnableToResolveException;
-import com.acidmanic.utility.myoccontainer.resolvearguments.LifetimeManagerInterceptor;
-import com.acidmanic.utility.myoccontainer.resolvearguments.LifetimeType;
-import com.acidmanic.utility.myoccontainer.resolvearguments.ResolveArguments;
+import com.acidmanic.utility.myoccontainer.lifetimemanagement.LifetimeManagerInterceptor;
+import com.acidmanic.utility.myoccontainer.configuration.data.ResolveParameters;
 import com.acidmanic.utility.myoccontainer.resolvestrategies.DefaultOrAnyResolveStrategy;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Parameter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import com.acidmanic.utility.myoccontainer.resolvestrategies.ResolveStrategy;
 import com.acidmanic.utility.myoccontainer.resolvestrategies.TagOnlyResolveStrategy;
 import com.acidmanic.utility.myoccontainer.resolvestrategies.TagOrDefaultResolveStrategy;
-import jdk.nashorn.internal.runtime.ArgumentSetter;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -26,96 +37,93 @@ import jdk.nashorn.internal.runtime.ArgumentSetter;
  */
 public class Resolver {
 
-    public static final String DEFAULT_TAG = "Default";
 
-    private final DependancyDictionary dependanciesMap = new DependancyDictionary();
-    private final DependancyDictionary primitives;
     private final LifetimeManagerInterceptor lifetimeManager = new LifetimeManagerInterceptor();
+    private final Registery registery;
+
     public Resolver() {
-        register(Long.class, Long.class);
-        register(long.class, Long.class);
-        register(Integer.class, Integer.class);
-        register(int.class, Integer.class);
-        register(Short.class, Short.class);
-        register(short.class, Short.class);
-        register(Double.class, Double.class);
-        register(double.class, Double.class);
-        register(Float.class, Float.class);
-        register(float.class, Float.class);
-        register(Byte.class, Byte.class);
-        register(byte.class, Byte.class);
-        register(String.class, String.class);
-        primitives = (DependancyDictionary) this.dependanciesMap.clone();
+        this.registery = new Registery();
     }
 
-    public Resolver(ConfigurationFile configuration) {
-        this();
-        DependancyDictionary types = configuration.getDependancyMap();
-        for (TaggedClass tfrom : types.keySet()) {
-            this.dependanciesMap.put(tfrom, types.get(tfrom));
-        }
+    public Resolver(Registery registery) {
+        this.registery = registery;
     }
 
-    public Resolver(String filepath) {
-        this(new ConfigurationFile(filepath));
+    public <T> T resolve(Class type) throws Exception {
+        return (T) Resolver.this.resolve(type, ResolveSource.DEFAULT_TAG,
+                new DefaultOrAnyResolveStrategy(
+                        this.registery.getDependencyMap()));
     }
 
-    public final void register(Class resolving, Class resolved) {
+    public <T> T resolveByTagOnly(Class type, String tag) throws Exception {
+        return (T) Resolver.this.resolve(type, tag,
+                new TagOnlyResolveStrategy(this.registery.getDependencyMap()));
+    }
+
+    public <T> T resolve(Class type, String tag) throws Exception {
+        return (T) Resolver.this.resolve(type, tag,
+                new TagOrDefaultResolveStrategy(this.registery.getDependencyMap()));
+    }
+
+    public <T> T tryResolve(Class type) {
+        return (T) tryResolve(type, null);
+    }
+
+    public <T> T tryResolve(Class type, T def) {
         try {
-            this.dependanciesMap.put(new TaggedClass(DEFAULT_TAG, resolving), 
-                    new ResolveArguments(resolved));
-        } catch (Exception ex) {
-            Logger.getLogger(Resolver.class.getName()).log(Level.SEVERE, null, ex);
+            return resolve(type);
+        } catch (Exception e) {
         }
+        return def;
     }
 
-    public final void register(Class resolving, Class resolved, String tag) throws Exception {
-        this.register(resolving, resolved,tag,LifetimeType.Transient);
-    }
-    
-    public final void register(Class resolving, Class resolved, LifetimeType lifetime) throws Exception {
-        this.register(resolving, resolved,DEFAULT_TAG,lifetime);
-    }
-    
-    public final void register(Class resolving, Class resolved,String tag, LifetimeType lifetime) throws Exception {
-        this.dependanciesMap.put(new TaggedClass(tag, resolving), 
-                new ResolveArguments(lifetime, resolved));
-    }
-    
-    
-    public Object resolve(Class type) throws Exception {
-        return Resolver.this.resolve(type, DEFAULT_TAG, new DefaultOrAnyResolveStrategy(dependanciesMap));
+    public <T> T tryResolve(Class type, String tag) {
+        return (T) tryResolve(type, tag, null);
     }
 
-    public Object resolveByTagOnly(Class type, String tag) throws Exception {
-        return Resolver.this.resolve(type, tag, new TagOnlyResolveStrategy(dependanciesMap));
-    }
-
-    public Object resolve(Class type, String tag) throws Exception {
-        return Resolver.this.resolve(type, tag, new TagOrDefaultResolveStrategy(dependanciesMap));
+    public <T> T tryResolve(Class type, String tag, T def) {
+        try {
+            return resolve(type, tag);
+        } catch (Exception e) {
+        }
+        return def;
     }
 
     private Object resolve(Class resolving, String tagIfAny, ResolveStrategy strategy) throws Exception {
-        ResolveArguments resolved = strategy.search(resolving, tagIfAny);
+        ResolveParameters resolved = strategy.search(resolving, tagIfAny);
         if (resolved == null) {
             throw new UnableToResolveException();
         }
-        
-        return lifetimeManager.makeObject(resolved, 
+
+        return lifetimeManager.makeObject(resolved,
                 () -> createObject(resolved.getTargetType(), tagIfAny, strategy));
 
     }
 
-    public DependancyDictionary getRegisteredDependancies() {
-        DependancyDictionary ret
-                = (DependancyDictionary) this.dependanciesMap.clone();
-        for (TaggedClass key : primitives.keySet()) {
-            if (ret.containsKey(key)) {
-                ret.remove(key);
-            }
-        }
-        return ret;
+    public void install(Installer installer) {
+        installer.configure(this.registery);
     }
+
+    private void tryCreateObject(ArrayList<Object> list,
+            Dependency record,
+            ResolveStrategy strategy) {
+        try {
+            list.add(
+                    createObject(record.getResolveArguments().getTargetType(),
+                            record.getTaggedClass().getTag(), strategy)
+            );
+        } catch (Exception e) {
+        }
+    }
+
+    public <T> T[] resolveAll(Class resolving) {
+        List<Dependency> allrecords = this.registery.getDependencyMap().getAll(resolving);
+        ArrayList<Object> allObjects = new ArrayList<>();
+        ResolveStrategy strategy = new TagOnlyResolveStrategy(this.registery.getDependencyMap());
+        allrecords.forEach((record) -> tryCreateObject(allObjects, record, strategy));
+        return (T[]) allObjects.toArray();
+    }
+
 
     private Object createObject(Class resolvedType, String tagIfAny, ResolveStrategy strategy) throws Exception {
         Constructor[] constructors = resolvedType.getConstructors();
@@ -131,4 +139,13 @@ public class Resolver {
         }
         return ctor.newInstance(parameters);
     }
+    
+    public Registerer getRegistery(){
+        return this.registery;
+    }
+
+    public DependencyDictionary getRegisteredDependancies() {
+        return this.registery.getRegisteredDependencies();
+    }
+
 }

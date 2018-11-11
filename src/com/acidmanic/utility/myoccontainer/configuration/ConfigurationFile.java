@@ -1,13 +1,24 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* 
+ * Copyright (C) 2018 Mani Moayedi (acidmanic.moayedi@gmail.com)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.acidmanic.utility.myoccontainer.configuration;
 
-import com.acidmanic.utility.myoccontainer.DependancyDictionary;
-import com.acidmanic.utility.myoccontainer.TaggedClass;
-import com.acidmanic.utility.myoccontainer.configuration.serialization.MapRecordSerializer;
+import com.acidmanic.utility.myoccontainer.configuration.data.Dependency;
+import com.acidmanic.utility.myoccontainer.configuration.data.DependencySafeSaveValidator;
+import com.acidmanic.utility.myoccontainer.configuration.serialization.DependencySerializer;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -20,14 +31,14 @@ import java.util.List;
  */
 public class ConfigurationFile {
 
-    private final DependancyDictionary dependancyMap = new DependancyDictionary();
+    private final DependencyDictionary dependancyMap = new DependencyDictionary();
 
     private void addLine(String line) {
-        
+
         try {
-            MapRecord record = new MapRecordSerializer()
+            Dependency record = new DependencySerializer()
                     .deserialize(line);
-            this.dependancyMap.put(record.getKeyObject(), record.getValueObject());
+            this.dependancyMap.put(record);
         } catch (Exception e) {
         }
     }
@@ -47,7 +58,7 @@ public class ConfigurationFile {
         this.laodFile(filePath);
     }
 
-    public DependancyDictionary getDependancyMap() {
+    public DependencyDictionary getDependancyMap() {
         return this.dependancyMap.clone();
     }
 
@@ -55,12 +66,14 @@ public class ConfigurationFile {
         ConfigurationFile.save(filepath, this.dependancyMap);
     }
 
-    public static void save(String filepath, DependancyDictionary dependancies) throws Exception {
+    public static void save(String filepath, DependencyDictionary dependancies) throws Exception {
         StringBuilder sb = new StringBuilder();
-        MapRecordSerializer serializer = new MapRecordSerializer();
-        for (TaggedClass key : dependancies.keySet()) {
-            MapRecord record = new MapRecord(key, dependancies.get(key));
-            sb.append(serializer.serialize(record)).append("\n");
+        DependencySerializer serializer = new DependencySerializer();
+        DependencySafeSaveValidator validator = new DependencySafeSaveValidator();
+        for (Dependency record : dependancies.toList()) {
+            if (validator.isSaveSafe(record)) {
+                sb.append(serializer.serialize(record)).append("\n");
+            }
         }
         File f = new File(filepath);
         try {
