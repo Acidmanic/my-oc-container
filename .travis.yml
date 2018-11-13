@@ -6,6 +6,6 @@ deploy:
   skip-cleanup: true
   github-token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
   keep-history: true
-  file: dist/myoc-container.jar
+  file: $TRAVIS_BUILD_DIR/dist/myoc-container.jar
   on:
-    branch: master
+    branch: develop
