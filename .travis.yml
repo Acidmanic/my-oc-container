@@ -1,5 +1,6 @@
 language: java
 sudo: false
+script: ant jar
 deploy:
   provider: pages
   skip-cleanup: true
