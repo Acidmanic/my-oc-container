@@ -2,10 +2,11 @@ language: java
 sudo: false
 script: ant jar
 deploy:
-  provider: pages
+  provider: releases
   skip-cleanup: true
   github-token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
   keep-history: true
   file: $TRAVIS_BUILD_DIR/dist/myoc-container.jar
   on:
     branch: develop
+    tags: true
