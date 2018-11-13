@@ -4,7 +4,7 @@ script: ant jar
 deploy:
   provider: releases
   skip-cleanup: true
-  github-token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
+  api_key: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
   keep-history: true
   file: $TRAVIS_BUILD_DIR/dist/myoc-container.jar
   on:
