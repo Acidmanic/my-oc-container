@@ -33,7 +33,7 @@ You can register different implementations for each class by providing  a tag pa
 It also supports a fluent-like syntax. to register classes with you preference via a fluent syntax, you can call the _register()_ method without any arguments. then you can set any of the properties using provided functions:
 
 |        Method   |                                                                                                    |
-|------------------:|-------------------------------------------------------------------------------:|
+|:------------------|:-------------------------------------------------------------------------------|
 |	bind(.)      |	sets the class you want to choose an implementation for |
 |    to(.)   		 |  sets the class that would be the implementation |
 |   bindToSelf(.) | configures the resolver to resolve as class to itself. In other words, ``` resolver.register().bindToSelf(A.class)``` is equivalent to ``` resolver.register().bind(A.class).to(A.class)``` |
