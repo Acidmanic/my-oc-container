@@ -40,6 +40,12 @@ public class DependencyBuilder {
         this.lifetimeType = LifetimeType.Transient;
     }
 
+    public DependencyBuilder bindToSelf(Class type) {
+        this.resolvingType = type;
+        this.resolvedType = type;
+        return this;
+    }
+    
     public DependencyBuilder bind(Class type) {
         this.resolvingType = type;
         return this;
