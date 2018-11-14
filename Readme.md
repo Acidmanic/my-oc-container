@@ -83,7 +83,8 @@ resolver.register(c.class, C2.class,"fancyOne");    // fancy
 
 // Configuring your resolver - fluent like syntax
 
-resolver.register().bindToSelf(A.class);   resolver.register().bindToSelf(A.class).taggedAs("fancyOne").livesAsA(LifetimeType.Singleton);
+resolver.register().bindToSelf(A.class);  
+resolver.register().bindToSelf(A.class).taggedAs("fancyOne").livesAsA(LifetimeType.Singleton); 
 resolver.register().bind(b.class).to(B1.class);  
 resolver.register().bind(b.class).to(B2.class).taggedAs("fancyOne");  
 resolver.register().bind(c.class).to(C1.class);  
