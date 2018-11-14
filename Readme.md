@@ -4,31 +4,42 @@
 About
 ===== 
 
-MyOcContainer (My IOC Container) is supposed to be a very simple and lightweight  IOC container with mandatory features for a not very large project.  
+MyOcContainer (My IOC Container) is supposed to be a very simple and lightweight  IOC container with mandatory features for a small, to medium scale project.  
 
-How to use 
+
+
+Download
+======
+
+
+You can get [Latest Release](https://github.com/Acidmanic/my-oc-container/releases/latest)   from git-hub releases page. Simply download the **myoc-container.jar** from the release page and add it to your project classpath.
+
+
+How To Use 
 ========== 
+**Register then Resolve**!
 
-After importing the library into your project, the client code  will use an instance of the class __Resolver__ for most of the ___Configurations___ and ___Resolvings___.
+First you will create and instance of the clas **Resolver**, which is the main IOC object. The **Resolver** class is *NOT* a singleton therefore you can have different resolvation profiles in your project. but in most cases, a singleton is the best fit.
+With your **Resolver** object created, first you will configure it to know how to resolve each class by calling over-rides of register() method. After that, your resolver object can be used in project to produce your objects.
 
 
-
-
-Configuration:
+How To Use - Register (Configure):
 -------------
 
-you can register all your in use classes by calling one of the  overloads of the method _register(.)_.
+you can register all of your in-use classes by calling one of the  overloads of the method _register(.)_.
 
-Currently it does 'constructor injection's only. You can register different implementations for each class by providing  a tag parameter for _register_ method. a tag should be a string conforming to the convention of c-like languages variable names except it can have '-' and '.' in it.
+You can register different implementations for each class by providing  a tag parameter for _register_ method. a tag should be a string conforming to the convention of c-like languages variable names except it can have '-' and '.' in it.
 
-It also supports a fluent-like syntax. to register classes with you preference via a fluent syntax, you can call the _register()_ method 
-without any arguments. then you can set any of the properties using provided functions:
+It also supports a fluent-like syntax. to register classes with you preference via a fluent syntax, you can call the _register()_ method without any arguments. then you can set any of the properties using provided functions:
 
-    *) bind(.) sets the class you want to choose an implementation for
-    *) to(.)   sets the class that would be the implementation
-    *) taggedAs(.)  will set a tag for this registration
-    *) livesAsA(.) will take a LifetimeType argument to set the type of lifetime you want to use.
-    *) withBuilder(.) will register a builder to create the object.
+|        Method   |                                                                                                    |
+|------------------:|-------------------------------------------------------------------------------:|
+|	bind(.)      |	sets the class you want to choose an implementation for |
+|    to(.)   		 |  sets the class that would be the implementation |
+|   bindToSelf(.) | configures the resolver to resolve as class to itself. In other words, ``` resolver.register().bindToSelf(A.class)``` is equivalent to ``` resolver.register().bind(A.class).to(A.class)``` |
+|  taggedAs(.)   |  will set a tag for this registration |
+|  livesAsA(.)     |  will take a LifetimeType argument to set the type of lifetime you want to use. |
+|   withBuilder(.)  |   will register a builder to create the object.|
 
 You can perform a small life time management for objects by providing a __LifetimeType__ parameter to the _register_ method. LifetimeType currently can be __Transient__ (default) or __Singleton__. all singleton objects will be stored inside the  __Resolver__ object. and resolver itself is not a singleton so you can have multiple scopes in your application.
 
@@ -37,8 +48,8 @@ You can call withBuilder(.) method, passing it an implementation of __Builder__ 
 You can create an installer calss by implementing the __Installer__ interface. such a class will contain a _configure(Registerer myoc)_ method where you can put all your configuration lines. the __Registerer__ argument of the _configure(.)_ method provides the fluent syntax registration methods.
 
 
-Using the Resolver to resolve dependencies
-------------------------------------------
+How To Use - Resolve:
+--------------------------
 
 
 to create an object, you should call on of the _resolve_ methods from __Resolver__ object. different _resolve_ methods will  resolve the given type with different strategies. for example, _resolveByTagOnly_ will resolve the class only if it's pre-registered with the given tag.  It's also possible to save resolver configurations to a file or load them from a file.
@@ -72,8 +83,7 @@ resolver.register(c.class, C2.class,"fancyOne");    // fancy
 
 // Configuring your resolver - fluent like syntax
 
-resolver.register().bind(A.class).to(A.class);
-resolver.register().bind(A.class).to(A.class).taggedAs("fancyOne").livesAsA(LifetimeType.Singleton);
+resolver.register().bindToSelf(A.class);   resolver.register().bindToSelf(A.class).taggedAs("fancyOne").livesAsA(LifetimeType.Singleton);
 resolver.register().bind(b.class).to(B1.class);  
 resolver.register().bind(b.class).to(B2.class).taggedAs("fancyOne");  
 resolver.register().bind(c.class).to(C1.class);  
@@ -93,6 +103,9 @@ A aFancyImplementation = resolver.resolve(A.class,"fancyOne");
 
 
 ```
+
+**Note:**
+When you use the resolver to resolve a class to an object, you can also use *resolver.tryResolve(.)* methods instead of *resolver.resolve(.)* methods. The difference is that tryResolve(.) methods will not throw an exception, and instead they will return a null when they caught a problem resolving the given class.
 
 __More Examples__
 
