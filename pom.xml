@@ -5,16 +5,43 @@
   <artifactId>myoccontainer</artifactId>
   <packaging>jar</packaging>
   <version>1.0.0-SNAPSHOT</version>
-  <name>myoccontainer</name>
-  
+  <name>${project.groupId}:${project.artifactId}</name>
+  <description>
+	MyOcContainer (My IOC Container) is a very simple and lightweight IOC container for Java, with mandatory 
+	features for a small, to medium scale project.  
+  </description>
+  <url>https://github.com/Acidmanic/my-oc-container</url>
+  <licenses>
+    <license>
+      <name>GNU General Public License v3.0</name>
+      <url>https://www.gnu.org/licenses/gpl-3.0.en.html</url>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <name>Mani Moayedi</name>
+      <email>acidmanic.moayedi@gmail.com</email>
+      <organization>Acidmanic</organization>
+      <organizationUrl>http://www.acidmanic.com</organizationUrl>
+    </developer>
+  </developers>
+
+
+  <scm>
+    <connection>scm:git:git://github.com/Acidmanic/my-oc-container.git</connection>
+    <developerConnection>scm:git:ssh://github.com:Acidmanic/my-oc-container.git</developerConnection>
+    <url>http://github.com/Acidmanic/my-oc-container</url>
+  </scm>
+
   <properties>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
   </properties>
+
   <build>
      <sourceDirectory>src</sourceDirectory>
      <testSourceDirectory>test</testSourceDirectory>
-
 
      <plugins>
          <!-- maven source-->
@@ -60,4 +87,9 @@
       <version>4.12</version>
     </dependency>
   </dependencies>
+
+
 </project>
+
+
+
