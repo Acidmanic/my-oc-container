@@ -24,7 +24,7 @@ MyOc Container is available on maven central. you can add a maven dependency in 
 	<dependency>
 		<groupId>com.acidmanic</groupId>
 		<artifactId>myoccontainer</artifactId>
-		<version>1.0.1-SNAPSHOT</version>
+		<version>1.0.1</version>
 	</dependency>
 ```
 
