@@ -24,14 +24,14 @@ MyOc Container is available on maven central. you can add a maven dependency in 
 	<dependency>
 		<groupId>com.acidmanic</groupId>
 		<artifactId>myoccontainer</artifactId>
-		<version>1.0.0</version>
+		<version>1.0.1-SNAPSHOT</version>
 	</dependency>
 ```
 
 and to be used in gradle:
 
 ```
-	compile 'com.acidmanic:myoccontainer:1.0.0'
+	compile 'com.acidmanic:myoccontainer:1.0.1'
 ```
 
 **Jar package:** You can also get  [Latest Release](https://github.com/Acidmanic/my-oc-container/releases/latest)   from git-hub releases page. Simply download the **myoc-container.jar** from the release page and add it to your project classpath.
@@ -141,12 +141,3 @@ If you downloaded the code, you can take a look at test codes in the project in 
 __Contact:__
 
 acidmanic.moayedi@gmail.com         
-
-
-
-
-
-
-
-
-
