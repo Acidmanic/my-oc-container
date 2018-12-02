@@ -1,6 +1,10 @@
 [![Build Status](https://travis-ci.org/Acidmanic/my-oc-container.svg?branch=develop)](https://travis-ci.org/Acidmanic/my-oc-container)
 ![License](https://img.shields.io/badge/license-GPL--3.0-blue.svg)
 
+
+<img src="https://maven.apache.org/images/maven-logo-black-on-white.png" width="128px" height="32px" />  
+<img src="https://raw.githubusercontent.com/gradle/gradle/master/gradle.png" width="150px" height="42px" />
+
 About
 ===== 
 
@@ -11,6 +15,22 @@ MyOcContainer (My IOC Container) is supposed to be a very simple and lightweight
 Download
 ======
 
+MyOc Container is available on maven central. you can add a maven dependency in your pom.xml file using this snippet:
+
+```xml
+	<dependency>
+		<groupId>com.acidmanic</groupId>
+		<artifactId>myoccontainer</artifactId>
+		<version>1.0.0</version>
+	</dependency>
+```
+
+and to be used in gradle:
+
+```
+	compile 'com.acidmanic:myoccontainer:1.0.0'
+	
+```
 
 You can get [Latest Release](https://github.com/Acidmanic/my-oc-container/releases/latest)   from git-hub releases page. Simply download the **myoc-container.jar** from the release page and add it to your project classpath.
 
