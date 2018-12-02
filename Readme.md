@@ -1,9 +1,12 @@
 [![Build Status](https://travis-ci.org/Acidmanic/my-oc-container.svg?branch=develop)](https://travis-ci.org/Acidmanic/my-oc-container)
 ![License](https://img.shields.io/badge/license-GPL--3.0-blue.svg)
 
+---------
 
-<img src="https://maven.apache.org/images/maven-logo-black-on-white.png" width="128px" height="32px" />  
-<img src="https://raw.githubusercontent.com/gradle/gradle/master/gradle.png" width="150px" height="42px" />
+<img src="https://maven.apache.org/images/maven-logo-black-on-white.png" width="90px" height="26px" />  <img src="https://raw.githubusercontent.com/gradle/gradle/master/gradle.png" width="100px" height="32px" />
+
+-----
+
 
 About
 ===== 
