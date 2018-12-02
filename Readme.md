@@ -29,10 +29,9 @@ and to be used in gradle:
 
 ```
 	compile 'com.acidmanic:myoccontainer:1.0.0'
-	
 ```
 
-You can get [Latest Release](https://github.com/Acidmanic/my-oc-container/releases/latest)   from git-hub releases page. Simply download the **myoc-container.jar** from the release page and add it to your project classpath.
+**Jar package:** You can also get  [Latest Release](https://github.com/Acidmanic/my-oc-container/releases/latest)   from git-hub releases page. Simply download the **myoc-container.jar** from the release page and add it to your project classpath.
 
 
 How To Use 
