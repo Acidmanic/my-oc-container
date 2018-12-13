@@ -20,6 +20,8 @@ Download
 
 MyOc Container is available on maven central. you can add a maven dependency in your pom.xml file using this snippet:
 
+(JDK 1.8)
+
 ```xml
 	<dependency>
 		<groupId>com.acidmanic</groupId>
@@ -27,11 +29,25 @@ MyOc Container is available on maven central. you can add a maven dependency in 
 		<version>1.0.1</version>
 	</dependency>
 ```
+there is also a fork build for JDK 1.6:
 
-and to be used in gradle:
+```xml
+	<dependency>
+		<groupId>com.acidmanic</groupId>
+		<artifactId>myoccontainer16</artifactId>
+		<version>1.0.1</version>
+	</dependency>
+```
+
+and to be used in gradle (JDK 1.8):
 
 ```
 	compile 'com.acidmanic:myoccontainer:1.0.1'
+```
+and JDK 1.6:
+
+```
+	compile 'com.acidmanic:myoccontainer16:1.0.1'
 ```
 
 **Jar package:** You can also get  [Latest Release](https://github.com/Acidmanic/my-oc-container/releases/latest)   from git-hub releases page. Simply download the **myoc-container.jar** from the release page and add it to your project classpath.
