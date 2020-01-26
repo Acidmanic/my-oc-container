@@ -58,7 +58,7 @@ public class DependencyDictionary implements DependencyDictionaryInterface {
         this.mappingRecords.add(record);
         this.tagIndexes.put(getUniqueString(record), record);
         String classname = record.getTaggedClass().getType().getName();
-        if(this.recordsPerClass.containsKey(classname)==false){
+        if(!this.recordsPerClass.containsKey(classname)){
             this.recordsPerClass.put(classname, new ArrayList<>());
         }
         this.recordsPerClass.get(classname).add(record);
