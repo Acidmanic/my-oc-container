@@ -20,6 +20,7 @@ import com.acidmanic.utility.myoccontainer.configuration.data.Dependency;
 import com.acidmanic.utility.myoccontainer.configuration.data.DependencySafeSaveValidator;
 import com.acidmanic.utility.myoccontainer.configuration.serialization.DependencySerializer;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
@@ -81,7 +82,7 @@ public class ConfigurationFile {
                 f.delete();
             }
         } catch (Exception e) {
-            throw new Exception("Unable to write to file.");
+            throw new IOException("Unable to write to file.");
         }
         Files.write(Paths.get(filepath), sb.toString().getBytes(),
                 StandardOpenOption.CREATE);
