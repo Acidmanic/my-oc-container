@@ -1,3 +1,4 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/77f9cb43152b4be7963515bbf0b9e119)](https://app.codacy.com/manual/Acidmanic/my-oc-container?utm_source=github.com&utm_medium=referral&utm_content=Acidmanic/my-oc-container&utm_campaign=Badge_Grade_Dashboard)
 [![Build Status](https://travis-ci.org/Acidmanic/my-oc-container.svg?branch=develop)](https://travis-ci.org/Acidmanic/my-oc-container)
 ![License](https://img.shields.io/badge/license-GPL--3.0-blue.svg)
 
