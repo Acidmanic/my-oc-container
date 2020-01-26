@@ -43,7 +43,7 @@ public class DependencySafeSaveValidator {
             return false;
         }
 
-        if (isRecreatableByName(mapRecord.getResolveArguments().getBuilder().getClass()) == false) {
+        if (!isRecreatableByName(mapRecord.getResolveArguments().getBuilder().getClass())) {
             return false;
         }
         return true;
