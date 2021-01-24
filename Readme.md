@@ -27,7 +27,7 @@ MyOc Container is available on maven central. you can add a maven dependency in 
 	<dependency>
 		<groupId>com.acidmanic</groupId>
 		<artifactId>myoccontainer</artifactId>
-		<version>1.1.2-SNAPSHOT</version>
+		<version>1.1.2</version>
 	</dependency>
 ```
 there is also a fork build for JDK 1.6:
@@ -36,7 +36,7 @@ there is also a fork build for JDK 1.6:
 	<dependency>
 		<groupId>com.acidmanic</groupId>
 		<artifactId>myoccontainer16</artifactId>
-		<version>1.1.2-SNAPSHOT</version>
+		<version>1.0.1</version>
 	</dependency>
 ```
 
