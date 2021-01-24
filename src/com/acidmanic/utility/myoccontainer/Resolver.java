@@ -23,6 +23,7 @@ import com.acidmanic.utility.myoccontainer.exceptions.UnableToResolveException;
 import com.acidmanic.utility.myoccontainer.lifetimemanagement.LifetimeManagerInterceptor;
 import com.acidmanic.utility.myoccontainer.configuration.data.ResolveParameters;
 import com.acidmanic.utility.myoccontainer.lifetimemanagement.LifetimeType;
+import com.acidmanic.utility.myoccontainer.reflection.ReflectionHelper;
 import com.acidmanic.utility.myoccontainer.resolvestrategies.DefaultOrAnyResolveStrategy;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Parameter;
@@ -38,7 +39,6 @@ import java.util.List;
  */
 public class Resolver {
 
-
     private final LifetimeManagerInterceptor lifetimeManager = new LifetimeManagerInterceptor();
     private final Registery registery;
 
@@ -48,11 +48,11 @@ public class Resolver {
 
     public Resolver(Registery registery) {
         this.registery = registery;
-        
+
         this.registery.register().bind(DependencyDictionary.class)
                 .withBuilder(() -> registery.getDependencyMap())
                 .livesAsA(LifetimeType.Singleton);
-        
+
     }
 
     public <T> T resolve(Class type) throws Exception {
@@ -130,6 +130,44 @@ public class Resolver {
         return (T[]) allObjects.toArray();
     }
 
+    private interface Matcher {
+
+        boolean matches(Class type);
+    }
+    
+    public <T> List<T> resolveAllAnnotatedBy(Class annotationType) {
+
+        return resolveAllBy(t -> t.getAnnotation(annotationType) != null);
+    }
+
+    public <T> List<T> resolveAllImplemented(Class interfaceType) {
+        
+        ReflectionHelper helper = new ReflectionHelper();
+        
+        return resolveAllBy(t -> helper.implemented(t, interfaceType));
+    }
+
+    private <T> List<T> resolveAllBy(Matcher matcher) {
+
+        List<Dependency> all = getRegisteredDependancies().toList();
+
+        ArrayList<T> result = new ArrayList<>();
+
+        all.forEach(d -> {
+            Class type = d.getTaggedClass().getType();
+
+            if (matcher.matches(type)) {
+
+                T object = tryResolve(type);
+
+                if (object != null) {
+                    result.add(object);
+
+                }
+            }
+        });
+        return result;
+    }
 
     private Object createObject(Class resolvedType, String tagIfAny, ResolveStrategy strategy) throws Exception {
         Constructor[] constructors = resolvedType.getConstructors();
@@ -145,8 +183,8 @@ public class Resolver {
         }
         return ctor.newInstance(parameters);
     }
-    
-    public Registerer getRegistery(){
+
+    public Registerer getRegistery() {
         return this.registery;
     }
 
