@@ -61,6 +61,10 @@ public class Resolver {
                     ClassReference reference = () -> classes;
                     return reference;
                 });
+        
+        Resolver THIS = this;
+        this.registery.register().bind(this.getClass()).withBuilder(() -> THIS)
+                .livesAsA(LifetimeType.Singleton);
 
     }
 
