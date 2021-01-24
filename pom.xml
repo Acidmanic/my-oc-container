@@ -4,7 +4,7 @@
   <groupId>com.acidmanic</groupId>
   <artifactId>myoccontainer</artifactId>
   <packaging>jar</packaging>
-  <version>1.0.1</version>
+  <version>1.1.1-SNAPSHOT</version>
   <name>${project.groupId}:${project.artifactId}</name>
   <description>
 	MyOcContainer (My IOC Container) is a very simple and lightweight IOC container for Java, with mandatory 
