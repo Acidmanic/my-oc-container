@@ -53,6 +53,15 @@ public class Resolver {
                 .withBuilder(() -> registery.getDependencyMap())
                 .livesAsA(LifetimeType.Singleton);
 
+        this.registery.register().bind(ClassReference.class)
+                .withBuilder(() -> {
+                    List<Class> classes = new ArrayList<>();
+                    registery.getDependencyMap().toList()
+                            .forEach(d -> classes.add(d.getTaggedClass().getType()));
+                    ClassReference reference = () -> classes;
+                    return reference;
+                });
+
     }
 
     public <T> T resolve(Class type) throws Exception {
@@ -134,16 +143,16 @@ public class Resolver {
 
         boolean matches(Class type);
     }
-    
+
     public <T> List<T> resolveAllAnnotatedBy(Class annotationType) {
 
         return resolveAllBy(t -> t.getAnnotation(annotationType) != null);
     }
 
     public <T> List<T> resolveAllImplemented(Class interfaceType) {
-        
+
         ReflectionHelper helper = new ReflectionHelper();
-        
+
         return resolveAllBy(t -> helper.implemented(t, interfaceType));
     }
 
