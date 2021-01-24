@@ -22,6 +22,7 @@ import com.acidmanic.utility.myoccontainer.configuration.data.Dependency;
 import com.acidmanic.utility.myoccontainer.exceptions.UnableToResolveException;
 import com.acidmanic.utility.myoccontainer.lifetimemanagement.LifetimeManagerInterceptor;
 import com.acidmanic.utility.myoccontainer.configuration.data.ResolveParameters;
+import com.acidmanic.utility.myoccontainer.lifetimemanagement.LifetimeType;
 import com.acidmanic.utility.myoccontainer.resolvestrategies.DefaultOrAnyResolveStrategy;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Parameter;
@@ -42,11 +43,16 @@ public class Resolver {
     private final Registery registery;
 
     public Resolver() {
-        this.registery = new Registery();
+        this(new Registery());
     }
 
     public Resolver(Registery registery) {
         this.registery = registery;
+        
+        this.registery.register().bind(DependencyDictionary.class)
+                .withBuilder(() -> registery.getDependencyMap())
+                .livesAsA(LifetimeType.Singleton);
+        
     }
 
     public <T> T resolve(Class type) throws Exception {
