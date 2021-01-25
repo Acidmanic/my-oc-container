@@ -1,13 +1,13 @@
 language: java
 sudo: false
 install: true
-script: ant jar
+script: mvn clean package
 deploy:
   provider: releases
   skip-cleanup: true
   api_key: $GITHUB_TOKEN 
   keep-history: true
-  file: $TRAVIS_BUILD_DIR/dist/myoc-container.jar
+  file: $TRAVIS_BUILD_DIR/target/myoccontainer-1.1.2.jar
   on:
     branch: master
     tags: true
